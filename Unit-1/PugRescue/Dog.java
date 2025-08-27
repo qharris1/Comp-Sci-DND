@@ -9,7 +9,7 @@ public class Dog {
 	}
 	
 	public Dog(String name) {
-		this(name, "Pug");
+		this(name, "Golden");
 	}
 	
 
