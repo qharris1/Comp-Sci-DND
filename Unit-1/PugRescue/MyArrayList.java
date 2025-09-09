@@ -42,20 +42,27 @@ public class MyArrayList<E> {
 	/* Get the index-th object in the list. */
 	// O(1)
 	public E get(int index) {
+		if (index < 0 || index > size()){
+			throw new IndexOutOfBoundsException("Index " + index + " out of bounds for arguments get(index)");
+		}
 		return internalArray[index];
 	}
 
 	/* Replace the object at index with obj. returns object that was replaced. */
 	// O(1)
 	public E set(int index, E obj) {
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException(
+					"Index " + index + " out of bounds for arguments set(index, obj)");
+		}
 		E temp = internalArray[index];
 		internalArray[index] = obj;
 		return temp;
 	}
 
 	/*
-	 * Returns true if this list contains an element equal to obj; otherwise returns false. Best:
-	 * O(1) (when obj is early in the array); Worst: O(n)
+	 * Returns true if this list contains an element equal to obj; otherwise returns false. 
+	 * Best: O(1) (when obj is early in the array); Worst: O(n)
 	 */
 	public boolean contains(E obj) {
 		for (int i = 0; i < internalArray.length; i++) {
@@ -75,8 +82,8 @@ public class MyArrayList<E> {
 	@SuppressWarnings("unchecked")
 	/*
 	 * Doubles the size of the array if there are no more available slots when trying to add an obj
-	 * O(n)
 	 */
+	// O(n)
 	private void checkExpandArray() {
 		if (objectCount >= internalArray.length) {
 			E[] newArray = (E[]) new Object[internalArray.length * 2];
@@ -88,22 +95,29 @@ public class MyArrayList<E> {
 	}
 
 	/* Insert an object at index */
+	// O(1) if at end, O(n) if shift is needed
 	public void add(int index, E obj) {
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException(
+					"Index " + index + " out of bounds for arguments get(index)");
+		}
 		checkExpandArray();
 		E temp = set(index, obj);
-		for (int i = index + 1; i < internalArray.length; i++) {
+		for (int i = index + 1; i < objectCount; i++) {
 			temp = set(i, temp);
 		}
 		objectCount++;
 	}
 
 	/* Add an object to the end of the list; returns true */
+	// O(1) if at end, O(n) if shift is needed
 	public boolean add(E obj) {
 		add(objectCount, obj);
 		return true;
 	}
 
 	/* Remove the object at index and shift. Returns removed object. */
+	// O(n)
 	public E remove(int index) {
 		E temp = set(objectCount, null);
 		for (int i = objectCount - 1; i >= index; i--) {
@@ -120,9 +134,10 @@ public class MyArrayList<E> {
 	 * element exists). Returns true if this list contained the specified element (or equivalently,
 	 * if this list changed as a result of the call).
 	 */
+	// O(n)
 	public boolean remove(E obj) {
 		for (int i = 0; i < internalArray.length; i++) {
-			if (internalArray[i] == obj) {
+			if (obj == null) {
 				if (obj == internalArray[i]) {
 					remove(i);
 					return true;
@@ -143,19 +158,15 @@ public class MyArrayList<E> {
 	 * elements in the ArrayList. If the array is empty, it should return "[]". If there is one
 	 * element, "[X]", etc. Elements are separated by a comma and a space.
 	 */
+	// O(n)
 	public String toString() {
-		String print = "[";
-		for (int i = 0; i < internalArray.length; i++) {
-			if (internalArray[i] == null) {
-				print += "null";
-			} else {
-				print += internalArray[i].toString();
-			}
-			if (i != internalArray.length - 1) {
-				print += ", ";
+		StringBuilder print = new StringBuilder("[");
+		for (int i = 0; i < objectCount; i++) {
+				print.append(internalArray[i].toString());
+			if (i != objectCount - 1) {
+				print.append(", ");
 			}
 		}
-		return print + "]";
+		return print.append("]").toString();
 	}
-
 }

@@ -1,23 +1,35 @@
+import java.util.ArrayList;
+
 public class Tester {
     public static void main(String[] args) {
-        MyArrayList<Dog> list = new MyArrayList<Dog>();
+        ArrayList<Dog> list = new ArrayList<Dog>();
 
         // Test rescuePugs - DONE
-        list.add(new Dog("Yari", "Golden"));
-        list.add(new Dog("Carter", "evil"));
-        list.add(new Dog("Taj", "Golden"));
-        list.add(new Dog("Dylan", "evil"));
-        list.add(new Dog("Morgan", "evil"));
-        list.add(new Dog("Jackson", "evil"));
-        list.add(new Dog("Felicia", "Golden"));
+        // list.add(new Dog("Yari", "Golden"));
+        // list.add(new Dog("Carter", "evil"));
+        // list.add(new Dog("Taj", "Golden"));
+        // list.add(new Dog("Dylan", "evil"));
+        // list.add(new Dog("Morgan", "evil"));
+        // list.add(new Dog("Jackson", "evil"));
+        // list.add(new Dog("Felicia", "Golden"));
 
-        for (int index = 0; index < 999993; index++) {
-            list.add(new Dog("haha"));
+        for (int i = 0; i < 100000000; i++) {
+            if (i%3==0){
+                list.add(new Dog("P"));
+            } else if ( i % 3 == 1){
+                list.add(new Dog("P"));
+            } else {
+                list.add(new Dog("G", "Golden"));
+            }
         }
+
+        System.out.println("done");
 
         PugSaver.rescuePugs(list);
 
-        System.out.println(list.toString());
+        System.out.println("done");
+
+        // System.out.println(list.toString());
 
         // // size()
         // System.out.println("\nExpected 7: " + list.size());
