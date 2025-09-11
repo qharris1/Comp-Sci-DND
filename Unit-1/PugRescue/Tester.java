@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Tester {
     public static void main(String[] args) {
-        ArrayList<Dog> list = new ArrayList<Dog>();
+        MyArrayList<String> list = new MyArrayList<String>();
 
         // Test rescuePugs - DONE
         // list.add(new Dog("Yari", "Golden"));
@@ -13,21 +13,21 @@ public class Tester {
         // list.add(new Dog("Jackson", "evil"));
         // list.add(new Dog("Felicia", "Golden"));
 
-        for (int i = 0; i < 100000000; i++) {
-            if (i%3==0){
-                list.add(new Dog("P"));
-            } else if ( i % 3 == 1){
-                list.add(new Dog("P"));
-            } else {
-                list.add(new Dog("G", "Golden"));
-            }
-        }
+        // for (int i = 0; i < 100000000; i++) {
+        //     if (i%3==0){
+        //         list.add(new Dog("P"));
+        //     } else if ( i % 3 == 1){
+        //         list.add(new Dog("P"));
+        //     } else {
+        //         list.add(new Dog("G", "Golden"));
+        //     }
+        // }
 
-        System.out.println("done");
+        // System.out.println("done");
 
-        PugSaver.rescuePugs(list);
+        // PugSaver.rescuePugs(list);
 
-        System.out.println("done");
+        // System.out.println("done");
 
         // System.out.println(list.toString());
 
@@ -73,5 +73,18 @@ public class Tester {
         // list.add(null);
         
         // System.out.println("\n" + list.toString());
+
+		list.add("A");
+		list.add("B");
+		list.add("C");
+
+		list.add(1, "D");
+
+		System.out.println(list.toString());
+
+		list.add(4, "Yari");
+
+		System.out.println(list.toString());
+		
     }
 }

@@ -42,8 +42,9 @@ public class MyArrayList<E> {
 	/* Get the index-th object in the list. */
 	// O(1)
 	public E get(int index) {
-		if (index < 0 || index > size()){
-			throw new IndexOutOfBoundsException("Index " + index + " out of bounds for arguments get(index)");
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException(
+					"Index " + index + " out of bounds for arguments get(index)");
 		}
 		return internalArray[index];
 	}
@@ -61,8 +62,8 @@ public class MyArrayList<E> {
 	}
 
 	/*
-	 * Returns true if this list contains an element equal to obj; otherwise returns false. 
-	 * Best: O(1) (when obj is early in the array); Worst: O(n)
+	 * Returns true if this list contains an element equal to obj; otherwise returns false. Best:
+	 * O(1) (when obj is early in the array); Worst: O(n)
 	 */
 	public boolean contains(E obj) {
 		for (int i = 0; i < internalArray.length; i++) {
@@ -103,7 +104,7 @@ public class MyArrayList<E> {
 		}
 		checkExpandArray();
 		E temp = set(index, obj);
-		for (int i = index + 1; i < objectCount; i++) {
+		for (int i = index + 1; i <= objectCount; i++) {
 			temp = set(i, temp);
 		}
 		objectCount++;
@@ -162,7 +163,9 @@ public class MyArrayList<E> {
 	public String toString() {
 		StringBuilder print = new StringBuilder("[");
 		for (int i = 0; i < objectCount; i++) {
+			if (internalArray[i] != null) {
 				print.append(internalArray[i].toString());
+			}
 			if (i != objectCount - 1) {
 				print.append(", ");
 			}
