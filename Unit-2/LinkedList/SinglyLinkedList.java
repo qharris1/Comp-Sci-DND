@@ -46,7 +46,7 @@ public class SinglyLinkedList<E> {
 	public boolean contains(E obj) {
 		ListNode<E> currObject = head;
 		while (currObject != null) {
-			if (currObject.equals(obj)) {
+			if (currObject.getValue().equals(obj)) {
 				return true;
 			}
 			currObject = currObject.getNext();
@@ -60,7 +60,7 @@ public class SinglyLinkedList<E> {
 		ListNode<E> currObject = head;
 		int i = 0;
 		while (currObject != null) {
-			if (currObject.equals(obj)) {
+			if (currObject.getValue().equals(obj)) {
 				return i;
 			}
 			currObject = currObject.getNext();
@@ -80,38 +80,88 @@ public class SinglyLinkedList<E> {
 			tail.setNext(newTail);
 			tail = newTail;
 		}
-		nodeCount ++;
+		nodeCount++;
 		return true;
 	}
 
-	// // Removes the first element that is equal to obj, if any.
-	// // Returns true if successful; otherwise returns false.
-	// public boolean remove(E obj) {
-
-	// }
+	// Removes the first element that is equal to obj, if any.
+	// Returns true if successful; otherwise returns false.
+	public boolean remove(E obj) {
+		int index = indexOf(obj);
+		if (index != -1) {
+			remove(index);
+			return true;
+		}
+		nodeCount--;
+		return false;
+	}
 
 	// Returns the i-th element.
 	public E get(int i) {
+		if (i < 0) {
+			throw new IndexOutOfBoundsException(
+					"Negative value not applicable to method get(int i)");
+		}
 		ListNode<E> currObject = head;
+		int currPos = 0;
 		while (currObject != null) {
-			
+			if (currPos == i) {
+				return currObject.getValue();
+			}
+			currPos++;
 			currObject = currObject.getNext();
 		}
+		return null;
 	}
 
-	// // Replaces the i-th element with obj and returns the old value.
-	// public E set(int i, Object obj) {
-	// }
+	// Replaces the i-th element with obj and returns the old value.
+	public E set(int i, Object obj) {
+		add(i - 1, obj);
+		return remove(i);
+	}
 
 	// Inserts obj to become the i-th element. Increments the size
 	// of the list by one.
-	public void add(int i, Object obj) {}
+	public void add(int i, Object obj) {
+		ListNode<E> currObject = head;
+		for (int index = 0; index < i - 1; index++) {
+			currObject = currObject.getNext();
+		}
+		if (i == nodeCount - 1) {
+			currObject.setNext(new ListNode<E>((E) obj, currObject.getNext()));
+			tail = currObject.getNext();
+		} else {
+			currObject.setNext(new ListNode<E>((E) obj, currObject.getNext()));
+		}
+	}
 
-	// // Removes the i-th element and returns its value.
-	// // Decrements the size of the list by one.
-	// public E remove(int i) {
-
-	// }
+	// Removes the i-th element and returns its value.
+	// Decrements the size of the list by one.
+	public E remove(int i) {
+		ListNode<E> currObject = head;
+		for (int index = 0; index < i - 1; index++) {
+			if (currObject != null) {
+				currObject = currObject.getNext();
+				if (currObject.getNext() == tail) {
+					tail = currObject;
+					ListNode<E> endReturn = new ListNode<E>(currObject.getValue(), currObject.getNext());
+					tail.setNext(null);
+					return endReturn.getValue();
+				}
+			}
+		}
+		ListNode<E> returned = new ListNode<E>(currObject.getValue(), currObject.getNext());
+		while (currObject != null) {
+			currObject.setValue(currObject.getNext().getValue());
+			if (currObject.getNext() == tail) {
+				tail = currObject;
+				currObject.setNext(null);
+			}
+			currObject = currObject.getNext();
+		}
+		nodeCount--;
+		return returned.getValue();
+	}
 
 	// Returns a string representation of this list exactly like that for MyArrayList.
 	public String toString() {
