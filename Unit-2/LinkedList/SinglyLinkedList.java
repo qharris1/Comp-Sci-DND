@@ -17,6 +17,9 @@ public class SinglyLinkedList<E> {
 	// all elements from the array values, in the same order
 	@SuppressWarnings("unchecked")
 	public SinglyLinkedList(Object[] values) {
+		if (values == null) {
+			throw new IllegalArgumentException("Constructor values cannot be null");
+		}
 		for (int i = 0; i < values.length; i++) {
 			add((E) values[i]);
 		}
@@ -43,14 +46,7 @@ public class SinglyLinkedList<E> {
 	// Returns true if this list contains an element equal to obj;
 	// otherwise returns false.
 	public boolean contains(E obj) {
-		ListNode<E> currObject = head;
-		while (currObject != null) {
-			if (currObject.getValue().equals(obj)) {
-				return true;
-			}
-			currObject = currObject.getNext();
-		}
-		return false;
+		return indexOf(obj) != -1;
 	}
 
 	// Returns the index of the first element in equal to obj;
@@ -58,9 +54,15 @@ public class SinglyLinkedList<E> {
 	public int indexOf(E obj) {
 		ListNode<E> currObject = head;
 		int i = 0;
-		while (currObject != null) {
-			if (currObject.getValue().equals(obj)) {
-				return i;
+		for (int j = 0; j < nodeCount; j++) {
+			if (obj == null || currObject.getValue() == null) {
+				if (currObject.getValue() == obj) {
+					return i;
+				}
+			} else {
+				if (currObject.getValue().equals(obj)) {
+					return i;
+				}
 			}
 			currObject = currObject.getNext();
 			i++;
@@ -94,7 +96,7 @@ public class SinglyLinkedList<E> {
 		}
 		ListNode<E> currObject = head;
 		int currPos = 0;
-		while (currObject != null) {
+		for (int j = 0; j < nodeCount; j++) {
 			if (currPos == i) {
 				return currObject.getValue();
 			}
@@ -176,12 +178,14 @@ public class SinglyLinkedList<E> {
 	// Returns a string representation of this list exactly like that for MyArrayList.
 	public String toString() {
 		StringBuilder str = new StringBuilder("[");
-		ListNode<E> currObject = head;
-		while (currObject != tail) {
-			str.append(currObject.getValue() + ", ");
-			currObject = currObject.getNext();
+		if (nodeCount != 0) {
+			ListNode<E> currObject = head;
+			for (int i = 0; i < nodeCount - 1; i++) {
+				str.append(currObject.getValue() + ", ");
+				currObject = currObject.getNext();
+			}
+			str.append(tail.getValue());
 		}
-		str.append(tail.getValue());
 		return str.toString() + ']';
 	}
 }
