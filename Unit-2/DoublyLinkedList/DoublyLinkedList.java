@@ -21,6 +21,8 @@ public class DoublyLinkedList {
 		for (int i = 0; i < values.length; i++) {
 			add(values[i]);
 		}
+		SENTINEL.getNext().setPrevious(SENTINEL);
+		SENTINEL.getPrevious().setNext(SENTINEL);
 	}
 
 	// O(1)
@@ -82,7 +84,8 @@ public class DoublyLinkedList {
 			throw new IllegalArgumentException("Obj cannot be null");
 		}
 		if (nodeCount == 0) {
-			ListNode2<Nucleotide> add = new ListNode2<Nucleotide>(obj, getSentinel(), getSentinel());
+			ListNode2<Nucleotide> add =
+					new ListNode2<Nucleotide>(obj, getSentinel(), getSentinel());
 			SENTINEL.setNext(add);
 			SENTINEL.setPrevious(add);
 		} else {
@@ -150,7 +153,8 @@ public class DoublyLinkedList {
 			for (int index = 0; index < i - 1; index++) {
 				currObject = currObject.getNext();
 			}
-			ListNode2<Nucleotide> addition = new ListNode2<Nucleotide>(obj, currObject, currObject.getNext());
+			ListNode2<Nucleotide> addition =
+					new ListNode2<Nucleotide>(obj, currObject, currObject.getNext());
 			addition.getNext().setPrevious(addition);
 			currObject.setNext(addition);
 		}
@@ -185,14 +189,31 @@ public class DoublyLinkedList {
 	// MyArrayList.
 	// O(n)
 	public String toString() {
-		ListNode2<Nucleotide> currObject = SENTINEL.getNext();
+		ListNode2<Nucleotide> currObject = getSentinel().getNext();
+		StringBuilder returned = new StringBuilder("[");
+		if (currObject != getSentinel()) {
+			for (int i = 0; i < nodeCount - 1; i++) {
+				returned.append(currObject.getValue());
+				returned.append(", ");
+				currObject = currObject.getNext();
+			}
+			returned.append(getTail().getValue());
+		}
+		return returned.toString() + "]";
+	}
+
+	// Returns a string representation of this list exactly like that for
+	// MyArrayList.
+	// O(n)
+	public String toStringReverse() {
+		ListNode2<Nucleotide> currObject = SENTINEL.getPrevious();
 		StringBuilder returned = new StringBuilder("[");
 		for (int i = 0; i < nodeCount - 1; i++) {
 			returned.append(currObject.getValue());
 			returned.append(", ");
-			currObject = currObject.getNext();
+			currObject = currObject.getPrevious();
 		}
-		returned.append(getTail().getValue());
+		returned.append(getHead().getValue());
 		return returned.toString() + "]";
 	}
 
@@ -205,6 +226,7 @@ public class DoublyLinkedList {
 		}
 		if (seg.nodeCount != 0) {
 			getTail().setNext(seg.getHead());
+			getTail().getNext().setPrevious(getTail());
 			SENTINEL.setPrevious(seg.getTail());
 			nodeCount += seg.nodeCount;
 		}
@@ -218,7 +240,7 @@ public class DoublyLinkedList {
 	public void removeCCCCCCCCGGGGGGGG(ListNode2<Nucleotide> nodeBefore) {
 		ListNode2<Nucleotide> node = nodeBefore;
 		for (int i = 0; i <= 16; i++) {
-			if (node == null) {
+			if (node == SENTINEL) {
 				throw new IllegalArgumentException("Not enough nodes to remove 16");
 			}
 			node = node.getNext();
@@ -242,6 +264,8 @@ public class DoublyLinkedList {
 					} else {
 						found = true;
 					}
+					tempNode = tempNode.getNext();
+					segNode = segNode.getNext();
 				}
 			}
 			if (found) {
@@ -265,8 +289,14 @@ public class DoublyLinkedList {
 			for (int i = 0; i < seg.nodeCount; i++) {
 				currNode = currNode.getNext();
 			}
-			start.setNext(currNode.getNext());
-			nodeCount -= seg.nodeCount;
+			if (currNode == getTail()) {
+				getSentinel().setNext(getSentinel());
+				getSentinel().setPrevious(getSentinel());
+				nodeCount = 0;
+			} else {
+				start.setNext(currNode.getNext());
+				nodeCount -= seg.nodeCount;
+			}
 			return true;
 		}
 		return false;
@@ -296,18 +326,15 @@ public class DoublyLinkedList {
 		}
 		for (int i = 0; i < nodeCount; i++) {
 			if (currNode.getValue().equals(Nucleotide.A)) {
-				if (i + 2 > nodeCount - 1) {
-					set(i, Nucleotide.T);
-					add(Nucleotide.A);
-					add(Nucleotide.C);
-				} else {
 					set(i, Nucleotide.T);
 					add(i + 1, Nucleotide.A);
 					add(i + 2, Nucleotide.C);
-				}
 				i += 2;
 			}
-			currNode = currNode.getNext();
+			currNode = SENTINEL.getNext();
+			for (int j = 0; j < i; j++) {
+				currNode = currNode.getNext();
+			}
 		}
 	}
 

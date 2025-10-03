@@ -1,17 +1,18 @@
 public class ListNode2Tester {
     public static void main(String[] args) {
-        Nucleotide[] nucleotides = new Nucleotide[]{Nucleotide.C, Nucleotide.G, Nucleotide.T, Nucleotide.A};
+        Nucleotide[] nucleotides =
+                new Nucleotide[] {Nucleotide.C, Nucleotide.G, Nucleotide.T, Nucleotide.A};
         DoublyLinkedList list = new DoublyLinkedList(nucleotides);
 
-        // System.out.println(list.toString());
+        System.out.println(list.toString());
 
         // list.add(Nucleotide.T);
 
-        // System.out.println(list.toString());
+        // System.out.println("Add T: " + list.toString());
 
         // list.remove(Nucleotide.T);
 
-        // System.out.println(list.toString());
+        // System.out.println("Remove T: " + list.toString());
 
         // list.set(0, Nucleotide.C);
 
@@ -39,6 +40,8 @@ public class ListNode2Tester {
 
         // list.addSegmentToEnd(list2);
 
+        // list.addSegmentToEnd(list2);
+
         // System.out.println(list.toString());
 
         // list.deleteSegment(list2);
@@ -48,5 +51,13 @@ public class ListNode2Tester {
         // list.deleteLastThree();
 
         // System.out.println(list.toString());
+
+        Nucleotide[] nucleotides2 =
+                new Nucleotide[] {Nucleotide.A, Nucleotide.A};
+        DoublyLinkedList list2 = new DoublyLinkedList(nucleotides2);
+
+        list2.replaceEveryAWithTAC();
+
+        System.out.println(list2.toString());
     }
 }
