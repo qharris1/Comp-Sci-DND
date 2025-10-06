@@ -1,10 +1,31 @@
 public class ListNode2Tester {
     public static void main(String[] args) {
         Nucleotide[] nucleotides =
-                new Nucleotide[] {Nucleotide.C, Nucleotide.G, Nucleotide.T, Nucleotide.A};
-        DoublyLinkedList list = new DoublyLinkedList(nucleotides);
+                new Nucleotide[] {Nucleotide.A, Nucleotide.A};
+        DoublyLinkedList mylist = new DoublyLinkedList(nucleotides);
 
-        System.out.println(list.toString());
+        mylist.replaceEveryAWithTAC();
+
+        System.out.println(mylist);
+
+        // System.out.println(mylist);
+
+        // mylist.add(Nucleotide.G);
+        // mylist.add(Nucleotide.C);
+        // mylist.add(Nucleotide.T);
+        // mylist.add(Nucleotide.C);
+        // mylist.add(Nucleotide.A);
+        // mylist.add(Nucleotide.T);
+
+        // System.out.println(mylist);
+
+        // mylist.remove(3);
+
+        // System.out.println();
+
+        // System.out.println(mylist);
+
+        // System.out.println(mylist.toStringReverse());
 
         // list.add(Nucleotide.T);
 
@@ -52,12 +73,12 @@ public class ListNode2Tester {
 
         // System.out.println(list.toString());
 
-        Nucleotide[] nucleotides2 =
-                new Nucleotide[] {Nucleotide.A, Nucleotide.A};
-        DoublyLinkedList list2 = new DoublyLinkedList(nucleotides2);
+        // Nucleotide[] nucleotides2 =
+        //         new Nucleotide[] {Nucleotide.A, Nucleotide.A};
+        // DoublyLinkedList list2 = new DoublyLinkedList(nucleotides2);
 
-        list2.replaceEveryAWithTAC();
+        // list2.replaceEveryAWithTAC();
 
-        System.out.println(list2.toString());
+        // System.out.println(list2.toString());
     }
 }

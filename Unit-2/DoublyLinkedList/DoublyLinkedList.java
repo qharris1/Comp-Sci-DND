@@ -9,6 +9,8 @@ public class DoublyLinkedList {
 	// O(1)
 	public DoublyLinkedList() {
 		nodeCount = 0;
+		SENTINEL.setNext(SENTINEL);
+		SENTINEL.setPrevious(SENTINEL);
 	}
 
 	// Constructor: creates a list that contains
@@ -21,8 +23,6 @@ public class DoublyLinkedList {
 		for (int i = 0; i < values.length; i++) {
 			add(values[i]);
 		}
-		SENTINEL.getNext().setPrevious(SENTINEL);
-		SENTINEL.getPrevious().setNext(SENTINEL);
 	}
 
 	// O(1)
@@ -89,9 +89,10 @@ public class DoublyLinkedList {
 			SENTINEL.setNext(add);
 			SENTINEL.setPrevious(add);
 		} else {
-			ListNode2<Nucleotide> tail = new ListNode2<Nucleotide>(obj, getTail(), null);
+			ListNode2<Nucleotide> tail = new ListNode2<Nucleotide>(obj, getTail(), getSentinel());
 			getTail().setNext(tail);
 			SENTINEL.setPrevious(tail);
+			tail.getPrevious().setNext(tail);
 		}
 		nodeCount++;
 		return true;
@@ -131,6 +132,9 @@ public class DoublyLinkedList {
 		if (i < 0 || i > nodeCount - 1) {
 			throw new IndexOutOfBoundsException("Set index out of bounds");
 		}
+		if (obj == null) {
+			throw new IllegalArgumentException("Set obj cannot be null");
+		}
 		add(i, obj);
 		return remove(i + 1);
 	}
@@ -139,12 +143,17 @@ public class DoublyLinkedList {
 	// of the list by one.
 	// Best: O(1) Worst: O(n)
 	public void add(int i, Nucleotide obj) {
-		if (i < 0 || i > nodeCount - 1) {
+		if (i < 0 || i > nodeCount) {
 			throw new IndexOutOfBoundsException("Add index out of bounds");
 		}
+		if (obj == null) {
+			throw new IllegalArgumentException("Add obj cannot be null");
+		}
 		if (i == 0) {
-			getSentinel().setNext(
-					new ListNode2<Nucleotide>(obj, getSentinel(), getSentinel().getNext()));
+			ListNode2<Nucleotide> newNode =
+					new ListNode2<Nucleotide>(obj, getSentinel(), getSentinel().getNext());
+			getSentinel().setNext(newNode);
+			newNode.getNext().setPrevious(newNode);
 		} else if (i == nodeCount) {
 			getSentinel().setPrevious(
 					new ListNode2<Nucleotide>(obj, getSentinel().getPrevious(), getSentinel()));
@@ -172,14 +181,15 @@ public class DoublyLinkedList {
 		if (i == nodeCount - 1) {
 			value = getTail().getValue();
 			getSentinel().setPrevious(getTail().getPrevious());
+			getTail().setNext(getSentinel());
 		} else {
 			ListNode2<Nucleotide> currObject = SENTINEL.getNext();
 			for (int index = 0; index < i; index++) {
 				currObject = currObject.getNext();
 			}
 			value = currObject.getValue();
-			currObject.setValue(currObject.getNext().getValue());
-			currObject.setNext(currObject.getNext().getNext());
+			currObject.getNext().setPrevious(currObject.getPrevious());
+			currObject.getPrevious().setNext(currObject.getNext());
 		}
 		nodeCount--;
 		return value;
@@ -326,15 +336,21 @@ public class DoublyLinkedList {
 		}
 		for (int i = 0; i < nodeCount; i++) {
 			if (currNode.getValue().equals(Nucleotide.A)) {
-					set(i, Nucleotide.T);
+				set(i, Nucleotide.T);
+				if (i + 1 < nodeCount) {
 					add(i + 1, Nucleotide.A);
-					add(i + 2, Nucleotide.C);
-				i += 2;
+				} else {
+					add(Nucleotide.A);
+				}
+				i++;
+				if (i + 1 < nodeCount) {
+					add(i + 1, Nucleotide.C);
+				} else {
+					add(Nucleotide.C);
+				}
+				i++;
 			}
-			currNode = SENTINEL.getNext();
-			for (int j = 0; j < i; j++) {
-				currNode = currNode.getNext();
-			}
+			currNode = currNode.getNext();
 		}
 	}
 
