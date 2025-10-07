@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Tester {
     public static void main(String[] args) {
         MyArrayList<String> list = new MyArrayList<String>();
@@ -14,13 +12,13 @@ public class Tester {
         // list.add(new Dog("Felicia", "Golden"));
 
         // for (int i = 0; i < 100000000; i++) {
-        //     if (i%3==0){
-        //         list.add(new Dog("P"));
-        //     } else if ( i % 3 == 1){
-        //         list.add(new Dog("P"));
-        //     } else {
-        //         list.add(new Dog("G", "Golden"));
-        //     }
+        // if (i%3==0){
+        // list.add(new Dog("P"));
+        // } else if ( i % 3 == 1){
+        // list.add(new Dog("P"));
+        // } else {
+        // list.add(new Dog("G", "Golden"));
+        // }
         // }
 
         // System.out.println("done");
@@ -50,7 +48,7 @@ public class Tester {
 
         // System.out.println(list.toString());
         // for (int i = 0; i < 99; i++){
-        //     list.add(new Dog("dog"));
+        // list.add(new Dog("dog"));
         // }
 
         // list.add(10, new Dog("LOOK AT ME HELLO"));
@@ -71,20 +69,41 @@ public class Tester {
         // System.out.println("\n"+list.toString());
 
         // list.add(null);
-        
+
         // System.out.println("\n" + list.toString());
 
-		list.add("A");
-		list.add("B");
-		list.add("C");
+        list.add("A");
+        list.add("B");
+        list.add("C");
 
-		list.add(1, "D");
+        System.out.println(list);
 
-		System.out.println(list.toString());
+        list.add(1, "D");
 
-		list.add(4, "Yari");
+        System.out.println(list.toString());
 
-		System.out.println(list.toString());
-		
+        list.add(4, "Yari");
+
+        System.out.println(list.toString());
+
+        list.remove("Yari");
+
+        System.out.println(list);
+
+        System.out.println(list.get(list.size() - 1));
+
+        System.out.println(list.set(0, null));
+
+        System.out.println(list);
+
+        System.out.println(list.remove(null));
+
+        System.out.println(list);
+
+        System.out.println(list.remove(2));
+        System.out.println(list.remove(1));
+        System.out.println(list.remove(0));
+
+        System.out.println(list.isEmpty());
     }
 }

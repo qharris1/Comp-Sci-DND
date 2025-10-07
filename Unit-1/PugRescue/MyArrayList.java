@@ -42,7 +42,7 @@ public class MyArrayList<E> {
 	/* Get the index-th object in the list. */
 	// O(1)
 	public E get(int index) {
-		if (index < 0 || index > size()) {
+		if (index < 0 || index > size() - 1) {
 			throw new IndexOutOfBoundsException(
 					"Index " + index + " out of bounds for arguments get(index)");
 		}
@@ -120,6 +120,10 @@ public class MyArrayList<E> {
 	/* Remove the object at index and shift. Returns removed object. */
 	// O(n)
 	public E remove(int index) {
+		if (index < 0 || index >= size()) {
+			throw new IndexOutOfBoundsException(
+					"Index " + index + " out of bounds for arguments remove(index)");
+		}
 		E temp = set(objectCount, null);
 		for (int i = objectCount - 1; i >= index; i--) {
 			temp = set(i, temp);
@@ -149,7 +153,6 @@ public class MyArrayList<E> {
 					return true;
 				}
 			}
-
 		}
 		return false;
 	}
@@ -165,6 +168,8 @@ public class MyArrayList<E> {
 		for (int i = 0; i < objectCount; i++) {
 			if (internalArray[i] != null) {
 				print.append(internalArray[i].toString());
+			} else {
+				print.append("null");
 			}
 			if (i != objectCount - 1) {
 				print.append(", ");

@@ -1,12 +1,15 @@
 public class ListNode2Tester {
     public static void main(String[] args) {
         Nucleotide[] nucleotides =
-                new Nucleotide[] {Nucleotide.A, Nucleotide.A};
+                new Nucleotide[] {Nucleotide.A};
         DoublyLinkedList mylist = new DoublyLinkedList(nucleotides);
 
-        mylist.replaceEveryAWithTAC();
+        for (int i = 0; i < 100000; i++) {
+            System.out.println(i);
+            mylist.replaceEveryAWithTAC();
+        }
 
-        System.out.println(mylist);
+        // System.out.println(mylist);
 
         // System.out.println(mylist);
 
@@ -72,13 +75,5 @@ public class ListNode2Tester {
         // list.deleteLastThree();
 
         // System.out.println(list.toString());
-
-        // Nucleotide[] nucleotides2 =
-        //         new Nucleotide[] {Nucleotide.A, Nucleotide.A};
-        // DoublyLinkedList list2 = new DoublyLinkedList(nucleotides2);
-
-        // list2.replaceEveryAWithTAC();
-
-        // System.out.println(list2.toString());
     }
 }
