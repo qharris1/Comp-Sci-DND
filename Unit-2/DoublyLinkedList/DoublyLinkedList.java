@@ -248,15 +248,27 @@ public class DoublyLinkedList {
 	// you do not need to assume or check for that)
 	// O(1)
 	public void removeCCCCCCCCGGGGGGGG(ListNode2<Nucleotide> nodeBefore) {
-		ListNode2<Nucleotide> node = nodeBefore;
-		for (int i = 0; i <= 16; i++) {
-			if (node == SENTINEL) {
+		if (nodeBefore == null) {
+			throw new IllegalArgumentException("nodeBefore cannot be null");
+		}
+		if (nodeCount < 16) {
+			throw new IllegalArgumentException("Not enough nodes to remove 16");
+		}
+		ListNode2<Nucleotide> node = nodeBefore.getNext();
+		for (int i = 0; i < 16; i++) {
+			if (node == getSentinel()) {
 				throw new IllegalArgumentException("Not enough nodes to remove 16");
 			}
 			node = node.getNext();
 		}
-		nodeBefore.setNext(node);
 		nodeCount -= 16;
+		if (nodeCount == 0){
+			getSentinel().setNext(getSentinel());
+			getSentinel().setPrevious(getSentinel());
+		} else {
+			nodeBefore.setNext(node);
+			node.setPrevious(nodeBefore);
+		}
 	}
 
 	// Best: O(n) Worst: O(n^2)
@@ -292,6 +304,11 @@ public class DoublyLinkedList {
 	public boolean deleteSegment(DoublyLinkedList seg) {
 		if (seg == null) {
 			throw new IllegalArgumentException("Removed segment cannot be null");
+		}
+		if (seg.equals(this)) {
+			getSentinel().setNext(getSentinel());
+			getSentinel().setPrevious(getSentinel());
+			nodeCount = 0;
 		}
 		ListNode2<Nucleotide> start = findSegment(seg);
 		ListNode2<Nucleotide> currNode = start;
