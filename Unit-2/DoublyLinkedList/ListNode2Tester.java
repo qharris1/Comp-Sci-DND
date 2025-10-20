@@ -20,7 +20,11 @@ public class ListNode2Tester {
 
         System.out.println(mylist);
 
+        System.out.println(mylist.toStringReverse());
+
         System.out.println(mylist.deleteLastThree());
+
+        System.out.println(mylist.toStringReverse());
 
         System.out.println(mylist);
 
@@ -31,5 +35,7 @@ public class ListNode2Tester {
         mylist.addSegmentToEnd(new DoublyLinkedList(new Nucleotide[] {Nucleotide.C}));
 
         System.out.println(mylist);
+
+        System.out.println(mylist.toStringReverse());
     }
 }
