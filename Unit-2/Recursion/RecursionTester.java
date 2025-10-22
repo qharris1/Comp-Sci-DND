@@ -15,5 +15,7 @@ public class RecursionTester {
         Recursion.infect(griddy, 1, 1);
 
         Recursion.printStringMatrix(griddy);
+
+        System.out.println(Recursion.countNonConsecutiveSubsets(6));
     }
 }

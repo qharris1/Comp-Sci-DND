@@ -23,7 +23,7 @@ public class Recursion {
 		if (r >= grid.length || r < 0) {
 			return;
 		}
-		if (c >= grid[r].length || c < 0){
+		if (c >= grid[r].length || c < 0) {
 			return;
 		}
 		if (grid[r][c] == "infected" || grid[r][c] == "vaccinated") {
@@ -37,7 +37,7 @@ public class Recursion {
 		}
 	}
 
-	public static void printStringMatrix(String[][] grid){
+	public static void printStringMatrix(String[][] grid) {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				System.out.print(grid[i][j] + " ");
@@ -46,40 +46,49 @@ public class Recursion {
 		}
 	}
 
-	// // How many subsets are there of the numbers 1...n
-	// // that don't contain any consecutive integers?
-	// // e.g. for n = 4, the subsets are {}, {1}, {2}, {3}, {4},
-	// // {1, 3}, {1, 4}, {2, 4}
-	// // The other subsets of 1,2,3,4 that DO contain consecutive integers are
-	// // {1,2}, {2,3}, {3,4}, {1,2,3}, {1,2,4}, {1,3,4}, {1,2,3,4}
-	// // Precondition: n > 0
-	// public static long countNonConsecutiveSubsets(int n) {
+	// How many subsets are there of the numbers 1...n
+	// that don't contain any consecutive integers?
+	// e.g. for n = 4, the subsets are {}, {1}, {2}, {3}, {4},
+	// {1, 3}, {1, 4}, {2, 4}
+	// The other subsets of 1,2,3,4 that DO contain consecutive integers are
+	// {1,2}, {2,3}, {3,4}, {1,2,3}, {1,2,4}, {1,3,4}, {1,2,3,4}
+	// Precondition: n > 0
+	public static long countNonConsecutiveSubsets(int n) {
+		if (n == 2) {
+			return n;
+		}
+		if (n == 1) {
+			return 1;
+		}
+		return countNonConsecutiveSubsets(n - 1) + countNonConsecutiveSubsets(n - 2);
+	}
 
-	// }
+	// A kid at the bottom of the stairs can jump up 1, 2, or 3 stairs at a time.
+	// How many different ways can they jump up n stairs?
+	// Jumping 1-1-2 is considered different than jumping 1-2-1
+	// Precondition: n > 0
+	public static long countWaysToJumpUpStairs(int n) {
+		if (n == 1) {
+			return 1;
+		}
+		return countNonConsecutiveSubsets(n - 1) + countNonConsecutiveSubsets(n - 2);
+	}
 
-	// // A kid at the bottom of the stairs can jump up 1, 2, or 3 stairs at a time.
-	// // How many different ways can they jump up n stairs?
-	// // Jumping 1-1-2 is considered different than jumping 1-2-1
-	// // Precondition: n > 0
-	// public static long countWaysToJumpUpStairs(int n) {
+	// Everything above this line does NOT require a recursive helper method
+	// ----------------------------------
+	// Everything below this line requires a recursive helper method
+	// Any recursive helper method you write MUST have a comment describing:
+	// 1) what the helper method does/returns
+	// 2) your description must include role of each parameter in the helper method
 
-	// }
+	// Prints all the subsets of str on separate lines
+	// You may assume that str has no repeated characters
+	// For example, subsets("abc") would print out "", "a", "b", "c", "ab", "ac",
+	// "bc", "abc"
+	// Order is your choice
+	public static void printSubsets(String str) {
 
-	// // Everything above this line does NOT require a recursive helper method
-	// // ----------------------------------
-	// // Everything below this line requires a recursive helper method
-	// // Any recursive helper method you write MUST have a comment describing:
-	// // 1) what the helper method does/returns
-	// // 2) your description must include role of each parameter in the helper method
-
-	// // Prints all the subsets of str on separate lines
-	// // You may assume that str has no repeated characters
-	// // For example, subsets("abc") would print out "", "a", "b", "c", "ab", "ac",
-	// // "bc", "abc"
-	// // Order is your choice
-	// public static void printSubsets(String str) {
-
-	// }
+	}
 
 	// // List contains a single String to start.
 	// // Prints all the permutations of str on separate lines
