@@ -71,7 +71,13 @@ public class Recursion {
 		if (n == 1) {
 			return 1;
 		}
-		return countNonConsecutiveSubsets(n - 1) + countNonConsecutiveSubsets(n - 2);
+		if (n == 2) {
+			return 2;
+		}
+		if (n == 3) {
+			return 4;
+		}
+		return countWaysToJumpUpStairs(n-1) + countWaysToJumpUpStairs(n-2) + countWaysToJumpUpStairs(n-3);
 	}
 
 	// Everything above this line does NOT require a recursive helper method
@@ -87,7 +93,17 @@ public class Recursion {
 	// "bc", "abc"
 	// Order is your choice
 	public static void printSubsets(String str) {
+		if (str.length() == 0){
+			System.out.println("");
+			return;
+		}
+		for (int i = 0; i < str.length(); i++) {
+			
+		}
+	}
 
+	private void findSubsetsForLength(String str){
+		
 	}
 
 	// // List contains a single String to start.

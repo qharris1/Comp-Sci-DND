@@ -17,5 +17,7 @@ public class RecursionTester {
         Recursion.printStringMatrix(griddy);
 
         System.out.println(Recursion.countNonConsecutiveSubsets(6));
+
+        System.out.println(Recursion.countWaysToJumpUpStairs(5));
     }
 }
