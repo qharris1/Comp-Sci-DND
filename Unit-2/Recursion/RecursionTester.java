@@ -19,5 +19,7 @@ public class RecursionTester {
         System.out.println(Recursion.countNonConsecutiveSubsets(6));
 
         System.out.println(Recursion.countWaysToJumpUpStairs(5));
+
+        Recursion.printSubsets("abcd");
     }
 }

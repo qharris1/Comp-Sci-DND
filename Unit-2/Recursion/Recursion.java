@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Recursion {
 
 	// Prints the value of every node in the singly linked list with the given head,
@@ -77,7 +79,8 @@ public class Recursion {
 		if (n == 3) {
 			return 4;
 		}
-		return countWaysToJumpUpStairs(n-1) + countWaysToJumpUpStairs(n-2) + countWaysToJumpUpStairs(n-3);
+		return countWaysToJumpUpStairs(n - 1) + countWaysToJumpUpStairs(n - 2)
+				+ countWaysToJumpUpStairs(n - 3);
 	}
 
 	// Everything above this line does NOT require a recursive helper method
@@ -92,52 +95,56 @@ public class Recursion {
 	// For example, subsets("abc") would print out "", "a", "b", "c", "ab", "ac",
 	// "bc", "abc"
 	// Order is your choice
+
+	// TODO
+	private static ArrayList<String> getSubsetsForChar(String str) {
+		ArrayList<String> set = new ArrayList<String>();
+		set.add("" + str.charAt(0));
+		return set;
+	}
+
 	public static void printSubsets(String str) {
-		if (str.length() == 0){
+		System.out.println(str);
+		if (str.length() <= 1) {
 			System.out.println("");
 			return;
 		}
-		for (int i = 0; i < str.length(); i++) {
-			
-		}
+		getSubsetsForChar(str);
+		printSubsets(str.substring(1));
 	}
 
-	private void findSubsetsForLength(String str){
+	// List contains a single String to start.
+	// Prints all the permutations of str on separate lines
+	// You may assume that str has no repeated characters
+	// For example, permute("abc") could print out "abc", "acb", "bac", "bca",
+	// "cab", "cba"
+	// Order is your choice
+	public static void printPermutations(String str) {
 		
 	}
 
-	// // List contains a single String to start.
-	// // Prints all the permutations of str on separate lines
-	// // You may assume that str has no repeated characters
-	// // For example, permute("abc") could print out "abc", "acb", "bac", "bca",
-	// // "cab", "cba"
-	// // Order is your choice
-	// public static void printPermutations(String str) {
+	// Performs a mergeSort on the given array of ints
+	// Precondition: you may assume there are NO duplicates!!!
+	public static void mergeSort(int[] ints) {
 
-	// }
+	}
 
-	// // Performs a mergeSort on the given array of ints
-	// // Precondition: you may assume there are NO duplicates!!!
-	// public static void mergeSort(int[] ints) {
+	// Performs a quickSort on the given array of ints
+	// Use the middle element (index n/2) as the pivot
+	// Precondition: you may assume there are NO duplicates!!!
+	public static void quickSort(int[] ints) {
 
-	// }
+	}
 
-	// // Performs a quickSort on the given array of ints
-	// // Use the middle element (index n/2) as the pivot
-	// // Precondition: you may assume there are NO duplicates!!!
-	// public static void quickSort(int[] ints) {
+	// Prints a sequence of moves (one on each line)
+	// to complete a Towers of Hanoi problem:
+	// disks start on tower 0 and must end on tower 2.
+	// The towers are number 0, 1, 2, and each move should be of
+	// the form "1 -> 2", meaning "take the top disk of tower 1 and
+	// put it on tower 2" etc.
+	public static void solveHanoi(int startingDisks) {
 
-	// }
-
-	// // Prints a sequence of moves (one on each line)
-	// // to complete a Towers of Hanoi problem:
-	// // disks start on tower 0 and must end on tower 2.
-	// // The towers are number 0, 1, 2, and each move should be of
-	// // the form "1 -> 2", meaning "take the top disk of tower 1 and
-	// // put it on tower 2" etc.
-	// public static void solveHanoi(int startingDisks) {
-
-	// }
+	}
 
 	// // You are partaking in a scavenger hunt!
 	// // You've gotten a secret map to find many of the more difficult
