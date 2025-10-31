@@ -96,21 +96,59 @@ public class Recursion {
 	// "bc", "abc"
 	// Order is your choice
 
-	// TODO
-	private static ArrayList<String> getSubsetsForChar(String str) {
-		ArrayList<String> set = new ArrayList<String>();
-		set.add("" + str.charAt(0));
-		return set;
+	public static void printSubsets(String str) {
+		ArrayList<String> allSubsets = printSubsetsHelper(str, 0, "");
+		for (String subset : allSubsets) {
+			System.out.println(subset);
+		}
 	}
 
-	public static void printSubsets(String str) {
-		System.out.println(str);
-		if (str.length() <= 1) {
-			System.out.println("");
-			return;
+	/**
+	 * Returns an ArrayList of the possible subsets by recursively adding two versions of a string:
+	 * one that contains charAt(index) and one that doesn't
+	 * 
+	 * @param String str -> Original String
+	 * @param Integer index -> Character to be added
+	 * @param String soFar -> Current built subset
+	 * 
+	 * @return ArrayList<String>
+	 */
+	private static ArrayList<String> printSubsetsHelper(String str, int index, String soFar) {
+		ArrayList<String> result = new ArrayList<String>();
+		if (index == str.length()) {
+			result.add(soFar);
+			return result;
 		}
-		getSubsetsForChar(str);
-		printSubsets(str.substring(1));
+
+		result.addAll(printSubsetsHelper(str, index + 1, soFar));
+		result.addAll(printSubsetsHelper(str, index + 1, soFar + str.charAt(index)));
+
+		return result;
+	}
+
+
+	private static ArrayList<String> getPermutations(String str, int length) {
+		ArrayList<String> result = new ArrayList<String>();
+		if (length == 1) {
+			result.add("" + str.charAt(str.length() - 1));
+			return result;
+		}
+
+		result = getPermutations(str, length - 1);
+		for (int i = 0; i < length; i++) {
+			result.add(i + 1, result.get(i));
+			i++;
+		}
+		for (int i = 0; i < result.size(); i++) {
+			String temp = result.get(i).substring(0, i);
+			if (i == 0) {
+				result.set(i, str.charAt(str.length() - length) + temp);
+			} else {
+				result.set(i, temp + str.charAt(str.length() - length));
+			}
+		}
+
+		return result;
 	}
 
 	// List contains a single String to start.
@@ -120,7 +158,9 @@ public class Recursion {
 	// "cab", "cba"
 	// Order is your choice
 	public static void printPermutations(String str) {
-		
+		for (int i = 0; i < str.length(); i++) {
+			System.out.println(getPermutations(str, str.length()));
+		}
 	}
 
 	// Performs a mergeSort on the given array of ints
