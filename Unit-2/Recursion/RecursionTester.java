@@ -4,11 +4,11 @@ public class RecursionTester {
         // ListNode("Third")));
         // Recursion.printListInReverse(linkedList);
 
-        String[] grod = new String[] {"healthy", "healthy", "vaccinated"};
+        String[] grod = new String[] { "healthy", "healthy", "vaccinated" };
 
-        String[] grad = new String[] {"vaccinated", "healthy", "healthy"};
+        String[] grad = new String[] { "vaccinated", "healthy", "healthy" };
 
-        String[][] griddy = new String[][] {grad, grod, grod};
+        String[][] griddy = new String[][] { grad, grod, grod };
 
         Recursion.printStringMatrix(griddy);
 
@@ -23,5 +23,9 @@ public class RecursionTester {
         // Recursion.printSubsets("ab");
 
         Recursion.printPermutations("abcd");
+
+        // Recursion.mergeSort(new int[] {38, 27, 43, 10});
+
+        Recursion.quickSort(new int[] {4, 3, 1, 2, 5, 9, 7, 10, 6});
     }
 }

@@ -108,9 +108,9 @@ public class Recursion {
 	 * versions of a string:
 	 * one that contains charAt(index) and one that doesn't
 	 * 
-	 * @param str -> Original String
-	 * @param index -> Int for character in str to be added
-	 * @param soFar -> Current built subset
+	 * @param str   Original String
+	 * @param index Int for character in str to be added
+	 * @param soFar Current built subset
 	 * 
 	 * @return ArrayList<String> of subsets
 	 */
@@ -127,13 +127,23 @@ public class Recursion {
 		return result;
 	}
 
+	// List contains a single String to start.
+	// Prints all the permutations of str on separate lines
+	// You may assume that str has no repeated characters
+	// For example, permute("abc") could print out "abc", "acb", "bac", "bca",
+	// "cab", "cba"
+	// Order is your choice
+	public static void printPermutations(String str) {
+		System.out.println(printPermutationsHelper(str, -1));
+	}
+
 	/**
 	 * Returns an ArrayList of all permutations of a given string by, starting from
 	 * the last character in the String, adding the next letter in every possible
 	 * index.
 	 * 
-	 * @param str -> Original String
-	 * @param addPos -> Character from str to be added
+	 * @param str    Original String
+	 * @param addPos Character from str to be added
 	 * 
 	 * @return ArrayList<String> of permutations
 	 */
@@ -162,39 +172,125 @@ public class Recursion {
 		return result;
 	}
 
-	// List contains a single String to start.
-	// Prints all the permutations of str on separate lines
-	// You may assume that str has no repeated characters
-	// For example, permute("abc") could print out "abc", "acb", "bac", "bca",
-	// "cab", "cba"
-	// Order is your choice
-	public static void printPermutations(String str) {
-		System.out.println(printPermutationsHelper(str, -1));
-	}
-
 	// Performs a mergeSort on the given array of ints
 	// Precondition: you may assume there are NO duplicates!!!
 	public static void mergeSort(int[] ints) {
+		ints = mergeSortHelper(ints);
+	}
 
+	/**
+	 * Returns an Array of sorted integers by dividing the array into smaller
+	 * iterations, comparing them individually once they reach a length of 1
+	 * 
+	 * @param ints int[] to be sorted
+	 * 
+	 * @return Sorted int[]
+	 */
+	private static int[] mergeSortHelper(int[] ints) {
+		if (ints.length <= 1) {
+			return ints;
+		}
+		int[] firstHalf = new int[ints.length / 2];
+		for (int i = 0; i < firstHalf.length; i++) {
+			firstHalf[i] = ints[i];
+		}
+		int[] secondHalf = new int[ints.length - firstHalf.length];
+		for (int i = 0; i < secondHalf.length; i++) {
+			secondHalf[i] = ints[i + firstHalf.length];
+		}
+		firstHalf = mergeSortHelper(firstHalf);
+		secondHalf = mergeSortHelper(secondHalf);
+
+		int[] result = new int[firstHalf.length + secondHalf.length];
+		int i = 0, j = 0, addPos = 0;
+		while (i < firstHalf.length && j < secondHalf.length) {
+			if (firstHalf[i] <= secondHalf[j]) {
+				result[addPos] = firstHalf[i];
+				i++;
+			} else {
+				result[addPos] = secondHalf[j];
+				j++;
+			}
+			addPos++;
+		}
+		while (i < firstHalf.length) {
+			result[addPos] = firstHalf[i];
+			addPos++;
+			i++;
+		}
+		while (j < secondHalf.length) {
+			result[addPos] = secondHalf[j];
+			addPos++;
+			j++;
+		}
+		return result;
 	}
 
 	// Performs a quickSort on the given array of ints
 	// Use the middle element (index n/2) as the pivot
 	// Precondition: you may assume there are NO duplicates!!!
 	public static void quickSort(int[] ints) {
+		ints = quickSortHelper(ints);
+		for (int i = 0; i < ints.length; i++) {
+			System.out.print(ints[i] + " ");
+		}
+	}
 
+	/**
+	 * Returns an Array of sorted integers by dividing the array in half recursively
+	 * by using the middle term as a pivot, creating seperate lists that are
+	 * "higher" and "lower" that are then spliced together
+	 * 
+	 * @param ints int[] to be sorted
+	 * 
+	 * @return Sorted int[]
+	 */
+	private static int[] quickSortHelper(int[] ints) {
+		if (ints.length <= 1) {
+			return ints;
+		}
+		int pivot = ints[ints.length / 2];
+		ArrayList<Integer> firstHalfTemp = new ArrayList<Integer>();
+		ArrayList<Integer> secondHalfTemp = new ArrayList<Integer>();
+		for (int i = 0; i < ints.length; i++) {
+			if (i == ints.length / 2) {
+			} else if (ints[i] < pivot) {
+				firstHalfTemp.add(ints[i]);
+			} else {
+				secondHalfTemp.add(ints[i]);
+			}
+		}
+		int[] firstHalf = new int[firstHalfTemp.size()];
+		int[] secondHalf = new int[secondHalfTemp.size()];
+		for (int i = 0; i < firstHalfTemp.size(); i++) {
+			firstHalf[i] = firstHalfTemp.get(i);
+		}
+		for (int i = 0; i < secondHalfTemp.size(); i++) {
+			secondHalf[i] = secondHalfTemp.get(i);
+		}
+		firstHalf = quickSortHelper(firstHalf);
+		secondHalf = quickSortHelper(secondHalf);
+		int[] result = new int[firstHalf.length + 1 + secondHalf.length];
+		for (int i = 0; i < firstHalf.length; i++) {
+			result[i] = firstHalf[i];
+		}
+		result[firstHalf.length] = pivot;
+		for (int i = 0; i < secondHalf.length; i++) {
+			result[i + firstHalf.length + 1] = secondHalf[i];
+		}
+		return result;
 	}
 
 	// Prints a sequence of moves (one on each line)
 	// to complete a Towers of Hanoi problem:
 	// disks start on tower 0 and must end on tower 2.
 	// The towers are number 0, 1, 2, and each move should be of
-	// the form "1 -> 2", meaning "take the top disk of tower 1 and
+	// the form "1 2", meaning "take the top disk of tower 1 and
 	// put it on tower 2" etc.
 	public static void solveHanoi(int startingDisks) {
 
 	}
-
+	
 	// // You are partaking in a scavenger hunt!
 	// // You've gotten a secret map to find many of the more difficult
 	// // items, but they are only available at VERY specific times at
