@@ -22,6 +22,6 @@ public class RecursionTester {
 
         // Recursion.printSubsets("ab");
 
-        Recursion.printPermutations("ab");
+        Recursion.printPermutations("abcd");
     }
 }
