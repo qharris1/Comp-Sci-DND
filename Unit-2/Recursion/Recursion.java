@@ -95,8 +95,10 @@ public class Recursion {
 	// For example, subsets("abc") would print out "", "a", "b", "c", "ab", "ac",
 	// "bc", "abc"
 	// Order is your choice
-
 	public static void printSubsets(String str) {
+		if (str == null) {
+			System.out.println("null");
+		}
 		ArrayList<String> allSubsets = printSubsetsHelper(str, 0, "");
 		for (String subset : allSubsets) {
 			System.out.println(subset);
@@ -134,6 +136,9 @@ public class Recursion {
 	// "cab", "cba"
 	// Order is your choice
 	public static void printPermutations(String str) {
+		if (str == null) {
+			System.out.println("null");
+		}
 		System.out.println(printPermutationsHelper(str, -1));
 	}
 
@@ -175,7 +180,9 @@ public class Recursion {
 	// Performs a mergeSort on the given array of ints
 	// Precondition: you may assume there are NO duplicates!!!
 	public static void mergeSort(int[] ints) {
-		ints = mergeSortHelper(ints);
+		if (!(ints == null)) {
+			ints = mergeSortHelper(ints);
+		}
 	}
 
 	/**
@@ -230,9 +237,8 @@ public class Recursion {
 	// Use the middle element (index n/2) as the pivot
 	// Precondition: you may assume there are NO duplicates!!!
 	public static void quickSort(int[] ints) {
-		ints = quickSortHelper(ints);
-		for (int i = 0; i < ints.length; i++) {
-			System.out.print(ints[i] + " ");
+		if (!(ints == null)) {
+			ints = quickSortHelper(ints);
 		}
 	}
 
@@ -288,9 +294,97 @@ public class Recursion {
 	// the form "1 2", meaning "take the top disk of tower 1 and
 	// put it on tower 2" etc.
 	public static void solveHanoi(int startingDisks) {
-
+		int[][] towers = new int[startingDisks][3];
+		for (int i = towers.length - 1; i >= 0; i--) {
+			towers[i][0] = i + 1;
+		}
+		solveHanoiHelper(towers, 0);
 	}
-	
+
+	// Turn 1: if even #, top disk goes on tower 2; odd, tower 3
+	// Turn 2: next disk goes to only legal space (opposite Turn 1)
+	// Turn 3: disk from Turn 1 goes on top of disk from Turn 2
+	// Turn 4: third disk goes to only legal spot
+	// Turn 5: top disk goes on tower 1
+	// Turn 6: cry????
+	private static int[][] solveHanoiHelper(int[][] towers, int turn) {
+		boolean done = true;
+		for (int i = 0; i < towers.length; i++) {
+			if (!(towers[i][2] == i + 1)) {
+				done = false;
+			}
+		}
+		if (done) {
+			return towers;
+		}
+		if (turn % 2 == 0) {
+			if (towers.length % 2 == 0) {
+				moveDisk(towers, turn % 3, (turn % 3 + 1) % 3);
+			} else {
+				moveDisk(towers, turn % 3, (turn % 3 + 2) % 3);
+			}
+		} else {
+			for (int i = 0; i < 3; i++) {
+				if (moveDisk(towers, (turn % 3), i)) {
+					break;
+				}
+			}
+		}
+
+		System.out.println();
+		for (int i = 0; i < towers.length; i++) {
+			for (int j = 0; j < towers[i].length; j++) {
+				System.out.print(towers[i][j] + " ");
+			}
+			System.out.println();
+		}
+
+		return solveHanoiHelper(towers, turn + 1);
+	}
+
+	private static boolean moveDisk(int[][] towers, int start, int end) {
+		if (start == end) {
+			return false;
+		}
+		int temp = 0;
+		int row = -1;
+		for (int i = 0; i < towers.length; i++) {
+			if (towers[i][start] != 0) {
+				temp = towers[i][start];
+				row = i;
+				break;
+			}
+		}
+		if (temp == 0) {
+			return false;
+		}
+		int destRow = -1;
+		int destDisk = 0;
+		for (int i = 0; i < towers.length; i++) {
+			if (towers[i][end] != 0) {
+				destDisk = towers[i][end];
+				destRow = i;
+				break;
+			}
+		}
+		if (destRow == -1 || temp < destDisk) {
+			int placeRow = -1;
+			for (int i = towers.length - 1; i >= 0; i--) {
+				if (towers[i][end] == 0) {
+					placeRow = i;
+					break;
+				}
+			}
+			if (placeRow == -1) {
+				return false;
+			}
+			towers[row][start] = 0;
+			towers[placeRow][end] = temp;
+			return true;
+		}
+		return false;
+	}
+
 	// // You are partaking in a scavenger hunt!
 	// // You've gotten a secret map to find many of the more difficult
 	// // items, but they are only available at VERY specific times at

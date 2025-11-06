@@ -20,12 +20,14 @@ public class RecursionTester {
 
         System.out.println(Recursion.countWaysToJumpUpStairs(5));
 
-        // Recursion.printSubsets("ab");
+        Recursion.printSubsets("ab");
 
         Recursion.printPermutations("abcd");
 
         // Recursion.mergeSort(new int[] {38, 27, 43, 10});
 
-        Recursion.quickSort(new int[] {4, 3, 1, 2, 5, 9, 7, 10, 6});
+        Recursion.quickSort(new int[] { 4, 3, 1, 2, 5, 9, 7, 10, 6 });
+
+        Recursion.solveHanoi(3);
     }
 }
