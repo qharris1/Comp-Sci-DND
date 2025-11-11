@@ -5,6 +5,9 @@ public class Recursion {
 	// Prints the value of every node in the singly linked list with the given head,
 	// but in reverse
 	public static void printListInReverse(ListNode head) {
+		if (head == null) {
+			throw new IllegalArgumentException("Head is null");
+		}
 		if (head.getNext() == null) {
 			System.out.println(head.getValue());
 			return;
@@ -22,6 +25,9 @@ public class Recursion {
 	// Trying to infect outside the confines of the grid also has no effect
 	// Precondition: grid has no null entries
 	public static void infect(String[][] grid, int r, int c) {
+		if (grid == null) {
+			throw new IllegalArgumentException("Grid is null");
+		}
 		if (r >= grid.length || r < 0) {
 			return;
 		}
@@ -106,11 +112,10 @@ public class Recursion {
 	}
 
 	/**
-	 * Returns an ArrayList of the possible subsets by recursively adding two
-	 * versions of a string:
+	 * Returns an ArrayList of the possible subsets by recursively adding two versions of a string:
 	 * one that contains charAt(index) and one that doesn't
 	 * 
-	 * @param str   Original String
+	 * @param str Original String
 	 * @param index Int for character in str to be added
 	 * @param soFar Current built subset
 	 * 
@@ -143,11 +148,10 @@ public class Recursion {
 	}
 
 	/**
-	 * Returns an ArrayList of all permutations of a given string by, starting from
-	 * the last character in the String, adding the next letter in every possible
-	 * index.
+	 * Returns an ArrayList of all permutations of a given string by, starting from the last
+	 * character in the String, adding the next letter in every possible index.
 	 * 
-	 * @param str    Original String
+	 * @param str Original String
 	 * @param addPos Character from str to be added
 	 * 
 	 * @return ArrayList<String> of permutations
@@ -172,7 +176,8 @@ public class Recursion {
 		result = expanded;
 		for (int i = 0; i < result.size(); i++) {
 			int pos = i % (str.length() - addPos);
-			result.set(i, result.get(i).substring(0, pos) + str.charAt(addPos) + result.get(i).substring(pos));
+			result.set(i, result.get(i).substring(0, pos) + str.charAt(addPos)
+					+ result.get(i).substring(pos));
 		}
 		return result;
 	}
@@ -180,14 +185,15 @@ public class Recursion {
 	// Performs a mergeSort on the given array of ints
 	// Precondition: you may assume there are NO duplicates!!!
 	public static void mergeSort(int[] ints) {
-		if (!(ints == null)) {
-			ints = mergeSortHelper(ints);
+		if (ints == null) {
+			throw new IllegalArgumentException("Ints is null");
 		}
+		ints = mergeSortHelper(ints);
 	}
 
 	/**
-	 * Returns an Array of sorted integers by dividing the array into smaller
-	 * iterations, comparing them individually once they reach a length of 1
+	 * Returns an Array of sorted integers by dividing the array into smaller iterations, comparing
+	 * them individually once they reach a length of 1
 	 * 
 	 * @param ints int[] to be sorted
 	 * 
@@ -237,15 +243,16 @@ public class Recursion {
 	// Use the middle element (index n/2) as the pivot
 	// Precondition: you may assume there are NO duplicates!!!
 	public static void quickSort(int[] ints) {
-		if (!(ints == null)) {
-			ints = quickSortHelper(ints);
+		if (ints == null) {
+			throw new IllegalArgumentException("Ints is null");
 		}
+		ints = quickSortHelper(ints);
 	}
 
 	/**
-	 * Returns an Array of sorted integers by dividing the array in half recursively
-	 * by using the middle term as a pivot, creating seperate lists that are
-	 * "higher" and "lower" that are then spliced together
+	 * Returns an Array of sorted integers by dividing the array in half recursively by using the
+	 * middle term as a pivot, creating seperate lists that are "higher" and "lower" that are then
+	 * spliced together
 	 * 
 	 * @param ints int[] to be sorted
 	 * 
@@ -256,8 +263,8 @@ public class Recursion {
 			return ints;
 		}
 		int pivot = ints[ints.length / 2];
-		ArrayList<Integer> firstHalfTemp = new ArrayList<Integer>();
-		ArrayList<Integer> secondHalfTemp = new ArrayList<Integer>();
+		ArrayList<Integer> firstHalfTemp = new ArrayList<Integer>(),
+				secondHalfTemp = new ArrayList<Integer>();
 		for (int i = 0; i < ints.length; i++) {
 			if (i == ints.length / 2) {
 			} else if (ints[i] < pivot) {
@@ -266,8 +273,9 @@ public class Recursion {
 				secondHalfTemp.add(ints[i]);
 			}
 		}
-		int[] firstHalf = new int[firstHalfTemp.size()];
-		int[] secondHalf = new int[secondHalfTemp.size()];
+		int[] firstHalf = new int[firstHalfTemp.size()],
+				secondHalf = new int[secondHalfTemp.size()],
+				result = new int[firstHalf.length + 1 + secondHalf.length];
 		for (int i = 0; i < firstHalfTemp.size(); i++) {
 			firstHalf[i] = firstHalfTemp.get(i);
 		}
@@ -276,7 +284,6 @@ public class Recursion {
 		}
 		firstHalf = quickSortHelper(firstHalf);
 		secondHalf = quickSortHelper(secondHalf);
-		int[] result = new int[firstHalf.length + 1 + secondHalf.length];
 		for (int i = 0; i < firstHalf.length; i++) {
 			result[i] = firstHalf[i];
 		}
@@ -294,17 +301,35 @@ public class Recursion {
 	// the form "1 2", meaning "take the top disk of tower 1 and
 	// put it on tower 2" etc.
 	public static void solveHanoi(int startingDisks) {
-		moveDisk(startingDisks, 0, 2, 1);
+		if (startingDisks < 0) {
+			throw new IllegalArgumentException("startingDisks cannnot be negative");
+		}
+		if (startingDisks == 0) {
+			System.out.println("bruh");
+		}
+		solveHanoiHelper(startingDisks, 0, 2, 1);
 	}
 
-	private static void moveDisk(int numDisks, int currTower, int targetTower, int otherTower) {
+	/**
+	 * Solves a Tower of Hanoi problem for a given number of disks by recursively handling every set
+	 * of decisions. An example of a decision set is: If the total number of disks is odd, move the
+	 * smallest disk to the end tower and the one below it to the middle tower.
+	 * 
+	 * @param numDisks number of disks being currently considered
+	 * @param currTower tower of the disk to be moved
+	 * @param targetTower tower of the disk's target
+	 * @param otherTower tower of the disk's indirect target (what happens after the first is moved)
+	 * 
+	 */
+	private static void solveHanoiHelper(int numDisks, int currTower, int targetTower,
+			int otherTower) {
 		if (numDisks == 1) {
 			System.out.println("Top disk of tower " + currTower + " goes to tower " + targetTower);
 			return;
 		}
-		moveDisk(numDisks - 1, currTower, otherTower, targetTower);
+		solveHanoiHelper(numDisks - 1, currTower, otherTower, targetTower);
 		System.out.println("Top disk of tower " + currTower + " goes to tower " + targetTower);
-		moveDisk(numDisks - 1, otherTower, targetTower, currTower);
+		solveHanoiHelper(numDisks - 1, otherTower, targetTower, currTower);
 	}
 
 	// // You are partaking in a scavenger hunt!
@@ -326,8 +351,48 @@ public class Recursion {
 	// // Then the best possible result is getting the item at time 3 and the one at
 	// // time 9
 	// // for a total of 20 points, so it would return 20.
-	// public static int scavHunt(int[] times, int[] points) {
+	public static int scavHunt(int[] times, int[] points) {
+		if (times == null || points == null) {
+			throw new IllegalArgumentException("Parameters cannot be null");
+		}
+		if (times.length != points.length) {
+			throw new IllegalArgumentException(
+					"Each value of points must have a corresponding time");
+		}
+		return scavHuntHelper(times, points, 0);
+	}
 
-	// }
-
+	/**
+	 * Finds the greatest possible sum of points for scavHunt by comparing two situations. If (1)
+	 * you claim the points at the current time, time iterates by 5. If (2) you skip the current
+	 * time, time iterates by 1.
+	 * 
+	 * @param times array of times corresponding to each points vlue
+	 * @param points array of points corresponding to each times value
+	 * @param time current time being considered
+	 * 
+	 * @return the higher number of points between the two situations
+	 */
+	private static int scavHuntHelper(int[] times, int[] points, int time) {
+		if (time > times[times.length - 1]) {
+			return 0;
+		}
+		if (time == times[times.length - 1]) {
+			return points[points.length - 1];
+		}
+		int index = 0;
+		for (int i = 0; i < times.length; i++) {
+			if (times[i] == time) {
+				index = i;
+				break;
+			}
+			if (times[i] > time) {
+				index = i;
+				break;
+			}
+		}
+		int take = points[index] + scavHuntHelper(times, points, times[index] + 5);
+		int takent = scavHuntHelper(times, points, times[index] + 1);
+		return take > takent ? take : takent;
+	}
 }
