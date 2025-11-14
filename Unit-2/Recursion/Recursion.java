@@ -63,10 +63,10 @@ public class Recursion {
 	// Precondition: n > 0
 	public static long countNonConsecutiveSubsets(int n) {
 		if (n == 2) {
-			return n;
+			return 3;
 		}
 		if (n == 1) {
-			return 1;
+			return 2;
 		}
 		return countNonConsecutiveSubsets(n - 1) + countNonConsecutiveSubsets(n - 2);
 	}
@@ -144,7 +144,10 @@ public class Recursion {
 		if (str == null) {
 			System.out.println("null");
 		}
-		System.out.println(printPermutationsHelper(str, -1));
+		ArrayList<String> allPermutations = printPermutationsHelper(str, -1);
+		for (String permutation : allPermutations) {
+			System.out.println(permutation);
+		}
 	}
 
 	/**
@@ -188,7 +191,10 @@ public class Recursion {
 		if (ints == null) {
 			throw new IllegalArgumentException("Ints is null");
 		}
-		ints = mergeSortHelper(ints);
+		int[] sorted = mergeSortHelper(ints);
+		for (int i = 0; i < sorted.length; i++) {
+			ints[i] = sorted[i];
+		}
 	}
 
 	/**
@@ -246,7 +252,10 @@ public class Recursion {
 		if (ints == null) {
 			throw new IllegalArgumentException("Ints is null");
 		}
-		ints = quickSortHelper(ints);
+		int[] sorted = quickSortHelper(ints);
+		for (int i = 0; i < sorted.length; i++) {
+			ints[i] = sorted[i];
+		}
 	}
 
 	/**
@@ -324,11 +333,11 @@ public class Recursion {
 	private static void solveHanoiHelper(int numDisks, int currTower, int targetTower,
 			int otherTower) {
 		if (numDisks == 1) {
-			System.out.println("Top disk of tower " + currTower + " goes to tower " + targetTower);
+			System.out.println(+currTower + " -> " + targetTower);
 			return;
 		}
 		solveHanoiHelper(numDisks - 1, currTower, otherTower, targetTower);
-		System.out.println("Top disk of tower " + currTower + " goes to tower " + targetTower);
+		System.out.println(currTower + " -> " + targetTower);
 		solveHanoiHelper(numDisks - 1, otherTower, targetTower, currTower);
 	}
 
