@@ -20,18 +20,23 @@ public class RecursionTester {
 
         // System.out.println(Recursion.countWaysToJumpUpStairs(5));
 
-        Recursion.printSubsets("ab");
+        // Recursion.printSubsets(null);
 
         // Recursion.printPermutations("abcd");
-        // int[] arr = {3, 7, 18, 2, 1, 20, 5, 8, 16, 0};
+        int[] arr = new int[1000000];
+
+        for (int i = 0; i < 1000000; i++) {
+            arr[i] = 1000000 - i;
+        }
+        System.out.println("Done Adding");
         // Recursion.mergeSort(arr);
 
-        // Recursion.quickSort(new int[] {4, 3, 1, 2, 5, 9, 7, 10, 6});
+        // Recursion.quickSort(arr);
 
-        // Recursion.solveHanoi(3);
+        // Recursion.solveHanoi(0);
 
-        // int[] times = {2, 6, 7, 20, 21, 40, 41, 43, 45, 47, 51, 53, 62, 63, 64};
-        // int[] points = {1000000, 4, 7, 300, 8, 20, 251, 23, 21, 1220, 8, 9, 14, 81, 82};
-        // System.out.println(Recursion.scavHunt(times, points));
+        // int[] times = {0};
+        // int[] points = {0};
+        System.out.println(Recursion.scavHunt(arr, arr));
     }
 }

@@ -104,6 +104,7 @@ public class Recursion {
 	public static void printSubsets(String str) {
 		if (str == null) {
 			System.out.println("null");
+			return;
 		}
 		ArrayList<String> allSubsets = printSubsetsHelper(str, 0, "");
 		for (String subset : allSubsets) {
@@ -143,6 +144,11 @@ public class Recursion {
 	public static void printPermutations(String str) {
 		if (str == null) {
 			System.out.println("null");
+			return;
+		}
+		if (str.length() == 0) {
+			System.out.println("");
+			return;
 		}
 		ArrayList<String> allPermutations = printPermutationsHelper(str, -1);
 		for (String permutation : allPermutations) {
@@ -315,6 +321,7 @@ public class Recursion {
 		}
 		if (startingDisks == 0) {
 			System.out.println("bruh");
+			return;
 		}
 		solveHanoiHelper(startingDisks, 0, 2, 1);
 	}
@@ -367,6 +374,9 @@ public class Recursion {
 		if (times.length != points.length) {
 			throw new IllegalArgumentException(
 					"Each value of points must have a corresponding time");
+		}
+		if (times.length == 0) {
+			return 0;
 		}
 		return scavHuntHelper(times, points, 0);
 	}
