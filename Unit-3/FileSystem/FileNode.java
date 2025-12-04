@@ -35,7 +35,7 @@ public class FileNode extends FileSystemNode {
     @Override
     public int getSize() {
         // The total contribution of a file is its own size.
-        return 0;
+        return size;
     }
 
     @Override

@@ -8,10 +8,12 @@ import java.io.PrintStream;
  * what it's doing plus the observed behavior.or
  *
  * And also assumes (based on our design):
- *  - FileSystemTree#getRoot() returns a non-null FolderNode
- *  - FolderNode has addFolder(String) and addFile(String, int) that return boolean
- *  - FileSystemNode has getDepth(), getHeight(), getSize(), getTotalNodeCount()
- *  - Navigator has processUserInputString(String) which prints results to System.out
+ * - FileSystemTree#getRoot() returns a non-null FolderNode
+ * - FolderNode has addFolder(String) and addFile(String, int) that return
+ * boolean
+ * - FileSystemNode has getDepth(), getHeight(), getSize(), getTotalNodeCount()
+ * - Navigator has processUserInputString(String) which prints results to
+ * System.out
  */
 public class FileSystemTester {
 
@@ -28,20 +30,30 @@ public class FileSystemTester {
             System.out.println("[PASS] Root is non-null.");
         }
 
-        System.out.println("Root toString(): " + root.toString());
-        System.out.println("Expected at root: '/' (or equivalent)");
+        // System.out.println("Root toString(): " + root.toString());
+        // System.out.println("Expected at root: '/' (or equivalent)");
 
-        // 2. Build a small structure under root
-        System.out.println("\n=== Building tree structure under root ===");
+        // // 2. Build a small structure under root
+        // System.out.println("\n=== Building tree structure under root ===");
         boolean addedDocs = root.addFolder("docs");
         boolean addedSrc = root.addFolder("src");
+        FolderNode src = (FolderNode) root.getChildByName("src");
+        boolean addedRobot = src.addFolder("robot");
         boolean addedMainJava = root.addFile("main.java", 120);
         boolean addedReadme = root.addFile("README.md", 80);
-        System.out.println(root.containsNameRecursive("src"));
+        // System.out.println(root.containsNameRecursive("robot"));
 
         // int depthRoot = root.getDepth();
         // int heightRoot = root.getHeight();
         // int sizeRoot = root.getSize();
         // int totalNodesRoot = root.getTotalNodeCount();
+
+        // System.out.println(depthRoot);
+        // System.out.println(heightRoot);
+        // System.out.println(sizeRoot);
+        // System.out.println(totalNodesRoot);
+
+        Navigator nav = new Navigator(tree);
+        nav.run();
     }
 }
