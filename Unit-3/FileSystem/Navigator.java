@@ -81,10 +81,8 @@ public class Navigator {
      * typical file system listings.
      */
     private void ls(String[] args) {
-        if (args.length == 0) {
-            for (FileSystemNode child : currentDirectory.getChildren()) {
-                System.out.println(child.getName());
-            }
+        for (FileSystemNode child : currentDirectory.getChildren()) {
+            System.out.println(child.getName());
         }
     }
 
@@ -92,19 +90,21 @@ public class Navigator {
      * Creates a new directory inside the current directory using the provided name.
      */
     private void mkdir(String[] args) {
-        currentDirectory.addFolder(args[0]);
+        try {
+            currentDirectory.addFolder(args[0]);
+        } catch (Exception e) {
+            System.out.println("Directory name must be specified");
+        }
     }
 
     /**
      * Creates a new file inside the current directory with a given name and size.
      */
     private void touch(String[] args) {
-        if (args.length < 2) {
-            System.out.println("Size must be specified");
-        }
         try {
             currentDirectory.addFile(args[0], Integer.parseInt(args[1]));
         } catch (Exception e) {
+            System.out.println("Name and size must be specified");
         }
     }
 
