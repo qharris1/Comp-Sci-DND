@@ -36,6 +36,8 @@ public class FileSystemTester {
         // // 2. Build a small structure under root
         // System.out.println("\n=== Building tree structure under root ===");
         boolean addedDocs = root.addFolder("docs");
+        FolderNode docs = (FolderNode) root.getChildByName("docs");
+        boolean addedNull = docs.addFile(null, 0);
         boolean addedSrc = root.addFolder("src");
         FolderNode src = (FolderNode) root.getChildByName("src");
         boolean addedRobot = src.addFolder("robot");

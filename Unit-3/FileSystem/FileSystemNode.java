@@ -7,7 +7,7 @@ public abstract class FileSystemNode {
     private String name;
     private FolderNode parent;
 
-    public FileSystemNode(String name, FolderNode parent) {
+    public FileSystemNode(FolderNode parent, String name) {
         this.name = name;
         this.parent = parent;
     }

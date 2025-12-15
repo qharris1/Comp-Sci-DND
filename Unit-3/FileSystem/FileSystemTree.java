@@ -11,7 +11,7 @@ public class FileSystemTree {
      * The root has no parent and typically uses a fixed name such as "/".
      */
     public FileSystemTree() {
-        this.root = new FolderNode("/", null); // or equivalent
+        this.root = new FolderNode(null, "/"); // or equivalent
     }
 
     /**

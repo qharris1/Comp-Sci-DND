@@ -1,7 +1,8 @@
 import java.util.Scanner;
 
 /**
- * Handles interactive navigation of the file system This class reads commands from standard input,
+ * Handles interactive navigation of the file system This class reads commands
+ * from standard input,
  * interprets them, and invokes operations on the current directory node.
  */
 public class Navigator {
@@ -10,7 +11,8 @@ public class Navigator {
     private boolean shouldExit;
 
     /**
-     * Constructs a navigator for a given file system tree. The starting location is the root
+     * Constructs a navigator for a given file system tree. The starting location is
+     * the root
      * directory.
      */
     public Navigator(FileSystemTree fst) {
@@ -19,7 +21,8 @@ public class Navigator {
     }
 
     /**
-     * Starts a command loop that repeatedly reads a line of input, interprets it as a command with
+     * Starts a command loop that repeatedly reads a line of input, interprets it as
+     * a command with
      * arguments, and executes it until a request to terminate is received.
      */
     public void run() {
@@ -37,52 +40,76 @@ public class Navigator {
     }
 
     /**
-     * Changes the current directory based on a single path argument. Behavior should mirror typical
-     * Unix shells: - "." refers to the current directory (no change). - ".." moves to the parent
-     * directory (if one exists). - Paths starting with "/" are interpreted from the root directory.
+     * Changes the current directory based on a single path argument. Behavior
+     * should mirror typical
+     * Unix shells: - "." refers to the current directory (no change). - ".." moves
+     * to the parent
+     * directory (if one exists). - Paths starting with "/" are interpreted from the
+     * root directory.
      * - Other paths are interpreted relative to the current directory.
      */
     private void cd(String[] args) {
-        if (args[0].equals(".")) {
-            return;
-        } else if (args[0].equals("..")) {
-            if (currentDirectory.getParent() != null) {
-                currentDirectory = currentDirectory.getParent();
-                return;
-            } else {
-                System.out.println("Parent directory not found");
-            }
+        if (args.length == 0 || args[0] == " ") {
+            System.out.println("Target directory not specified");
         } else {
-            if (args[0].charAt(0) == '/') {
-                currentDirectory = fileSystem.getRoot();
-            }
-            String[] path = args[0].split("/");
-            for (String directory : path) {
-                if (directory == "") {
-                    continue;
+            if (args[0].equals(".")) {
+                return;
+            } else if (args[0].equals("..")) {
+                if (currentDirectory.getParent() != null) {
+                    currentDirectory = currentDirectory.getParent();
+                    return;
+                } else {
+                    System.out.println("Parent directory not found");
                 }
-                try {
-                    FolderNode newDirectory =
-                            (FolderNode) currentDirectory.getChildByName(directory);
-                    if (newDirectory != null) {
-                        currentDirectory = newDirectory;
-                    } else {
-                        System.out.println("Directory not found: " + directory);
+            } else {
+                if (args[0].charAt(0) == '/') {
+                    currentDirectory = fileSystem.getRoot();
+                }
+                String[] path = args[0].split("/");
+                for (String directory : path) {
+                    if (directory == "") {
+                        continue;
                     }
-                } catch (Exception e) {
+                    if (directory.equals(".")) {
+                        continue;
+                    } else if (directory.equals("..")) {
+                        if (currentDirectory.getParent() != null) {
+                            currentDirectory = currentDirectory.getParent();
+                            continue;
+                        } else {
+                            System.out.println("Parent directory not found");
+                        }
+                    } else {
+                        try {
+                            FolderNode original = currentDirectory;
+                            FolderNode newDirectory = (FolderNode) currentDirectory.getChildByName(directory);
+                            if (newDirectory != null) {
+                                currentDirectory = newDirectory;
+                            } else {
+                                currentDirectory = original;
+                                System.out.println("Directory not found: " + directory);
+                                return;
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
                 }
-
             }
         }
     }
 
     /**
-     * Lists all items contained directly in the current directory. Output formatting can mirror
+     * Lists all items contained directly in the current directory. Output
+     * formatting can mirror
      * typical file system listings.
      */
     private void ls(String[] args) {
         for (FileSystemNode child : currentDirectory.getChildren()) {
-            System.out.println(child.getName());
+            if (child.isFolder()) {
+                System.out.println(child.getName() + "/");
+            } else {
+                System.out.println(child.getName());
+            }
         }
     }
 
@@ -109,7 +136,8 @@ public class Navigator {
     }
 
     /**
-     * Searches the current directory and its descendants for nodes with a given name and prints
+     * Searches the current directory and its descendants for nodes with a given
+     * name and prints
      * their paths.
      */
     private void find(String[] args) {
@@ -119,61 +147,81 @@ public class Navigator {
     }
 
     /**
-     * Prints the absolute path of the current directory, from the root to this node.
+     * Prints the absolute path of the current directory, from the root to this
+     * node.
      */
     private void pwd(String[] args) {
         System.out.println(currentDirectory.toString());
     }
 
     /**
-     * Displays the contents of the current directory as a tree, optionally respecting flags or
+     * Displays the contents of the current directory as a tree, optionally
+     * respecting flags or
      * depth limits if provided by the arguments.
      */
     private void tree(String[] args) {
         if (args.length == 0) {
-            printChildrenRecursively(currentDirectory, -1);
+            for (FileSystemNode child : currentDirectory.getChildren()) {
+                printChildrenRecursively(child, -1, 0);
+            }
         } else {
             try {
                 Integer.parseInt(args[0]);
-                System.out.println(currentDirectory.getName());
-                printChildrenRecursively(currentDirectory, Integer.parseInt(args[0]));
+                printChildrenRecursively(currentDirectory, Integer.parseInt(args[0]), 0);
             } catch (Exception e) {
                 System.out.println("Size must be specified");
             }
         }
     }
 
-    private void printChildrenRecursively(FileSystemNode node, int limit) {
-        if (limit != -1 && node.getDepth() > limit) {
+    private void printChildrenRecursively(FileSystemNode node, int limit, int depth) {
+        if (limit != -1 && depth > limit) {
             return;
         }
         if (node.isFolder()) {
             FolderNode folder = (FolderNode) node;
-            if (folder.getChildren().size() == 0) {
-                for (int i = 1; i <= node.getDepth(); i++) {
-                    System.out.print("-");
+            System.out.print("|");
+            if (depth > 0) {
+                for (int i = 1; i <= 4 * (depth) - 1; i++) {
+                    System.out.print(" ");
                 }
-                System.out.println(node.getName());
-                return;
+                System.out.println("|---" + folder.getName());
+            } else {
+                for (int i = 1; i <= 4 * (depth); i++) {
+                    System.out.print(" ");
+                }
+                System.out.println("---" + folder.getName());
             }
-            for (FileSystemNode child : folder.getChildren()) {
-                printChildrenRecursively(child, limit);
+            if (folder.getChildren().size() == 0) {
+                return;
+            } else {
+                for (FileSystemNode child : folder.getChildren()) {
+                    printChildrenRecursively(child, limit, depth + 1);
+                }
             }
         } else {
-            for (int i = 1; i <= node.getDepth(); i++) {
-                System.out.print("-");
+            if (depth > 0) {
+                System.out.print("|");
+                for (int i = 1; i <= 4 * (depth) - 1; i++) {
+                    System.out.print(" ");
+                }
+            } else {
+                for (int i = 1; i <= 4 * (depth); i++) {
+                    System.out.print(" ");
+                }
             }
-            System.out.println(node.getName());
+            System.out.println("|---" + node.getName());
             return;
         }
     }
 
     /**
-     * Prints how many nodes (files and folders) exist in the current directory and all of its
+     * Prints how many nodes (files and folders) exist in the current directory and
+     * all of its
      * subdirectories.
      */
     private void count(String[] args) {
-        System.out.println(currentDirectory.getTotalNodeCount());
+        System.out.println(currentDirectory.getTotalNodeCount() - 1);
     }
 
     /**
@@ -184,7 +232,8 @@ public class Navigator {
     }
 
     /**
-     * Prints the depth of the current directory, defined as the number of edges from the root
+     * Prints the depth of the current directory, defined as the number of edges
+     * from the root
      * directory down to this directory.
      */
     private void depth(String[] args) {
@@ -192,8 +241,10 @@ public class Navigator {
     }
 
     /**
-     * Prints the height of the current directory, defined as the longest downward distance from
-     * this directory to any file or subdirectory beneath it. An empty directory has value 0.
+     * Prints the height of the current directory, defined as the longest downward
+     * distance from
+     * this directory to any file or subdirectory beneath it. An empty directory has
+     * value 0.
      */
     private void height(String[] args) {
         System.out.println(currentDirectory.getHeight());
@@ -207,7 +258,8 @@ public class Navigator {
     }
 
     /**
-     * Interprets a line of user input by splitting it into a command and arguments, then forwarding
+     * Interprets a line of user input by splitting it into a command and arguments,
+     * then forwarding
      * control to the appropriate helper method.
      *
      * Example inputs and how they are interpreted: "ls" -> command: "ls" args: []

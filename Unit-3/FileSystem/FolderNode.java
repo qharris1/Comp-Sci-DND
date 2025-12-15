@@ -9,8 +9,8 @@ public class FolderNode extends FileSystemNode {
 
     private List<FileSystemNode> children;
 
-    public FolderNode(String name, FolderNode parent) {
-        super(name, parent);
+    public FolderNode(FolderNode parent, String name) {
+        super(parent, name);
         this.children = new ArrayList<>();
     }
 
@@ -50,7 +50,7 @@ public class FolderNode extends FileSystemNode {
      */
     public boolean addFile(String fileName, int size) {
         if (getChildByName(fileName) == null) {
-            children.add(new FileNode(this, fileName, size));
+            children.add(new FileNode(fileName, this, size));
             return true;
         }
         return false;
@@ -65,7 +65,7 @@ public class FolderNode extends FileSystemNode {
      */
     public boolean addFolder(String folderName) {
         if (getChildByName(folderName) == null) {
-            children.add(new FolderNode(folderName, this));
+            children.add(new FolderNode(this, folderName));
             return true;
         }
         return false;
@@ -103,11 +103,7 @@ public class FolderNode extends FileSystemNode {
         }
         ArrayList<Integer> heights = new ArrayList<Integer>();
         for (FileSystemNode child : children) {
-            if (child.isFolder()) {
-                heights.add(1 + child.getHeight());
-            } else {
-                heights.add(child.getHeight());
-            }
+            heights.add(1 + child.getHeight());
         }
         int max = 0;
         for (Integer height : heights) {
@@ -136,17 +132,10 @@ public class FolderNode extends FileSystemNode {
 
     @Override
     public int getTotalNodeCount() {
-        if (children.size() == 0) {
-            return 1;
-        }
         int sum = 0;
         for (FileSystemNode child : children) {
-            if (child.isFolder()) {
-                sum += child.getTotalNodeCount() + 1;
-            } else {
-                sum++;
-            }
+            sum += child.getTotalNodeCount();
         }
-        return sum;
+        return sum + 1;
     }
 }
