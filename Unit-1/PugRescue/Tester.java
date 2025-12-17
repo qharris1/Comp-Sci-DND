@@ -1,6 +1,30 @@
 public class Tester {
     public static void main(String[] args) {
-        MyArrayList<String> list = new MyArrayList<String>();
+        SortedArrayList<String> list = new SortedArrayList<String>();
+
+        list.remove("a");
+        System.out.println(list.contains("a"));
+
+        list.add("c");
+        list.add("b");
+        list.add("a");
+
+        list.remove("c");
+        System.out.println(list.contains("c"));
+
+        list.add("f");
+
+        list.add("a");
+
+        list.remove("a");
+
+        System.out.println(list.toString());
+
+        System.out.println(list.contains("b"));
+
+        list.add("abcdefg");
+
+        System.out.println(list.toString());
 
         // Test rescuePugs - DONE
         // list.add(new Dog("Yari", "Golden"));
@@ -59,7 +83,6 @@ public class Tester {
 
         // System.out.println(list.contains(null));
 
-
         // System.out.println(list.contains(removable));
 
         // list.remove(removable);
@@ -72,38 +95,38 @@ public class Tester {
 
         // System.out.println("\n" + list.toString());
 
-        list.add("A");
-        list.add("B");
-        list.add("C");
+        // list.add("A");
+        // list.add("B");
+        // list.add("C");
 
-        System.out.println(list);
+        // System.out.println(list);
 
-        list.add(1, "D");
+        // list.add(1, "D");
 
-        System.out.println(list.toString());
+        // System.out.println(list.toString());
 
-        list.add(4, "Yari");
+        // list.add(4, "Yari");
 
-        System.out.println(list.toString());
+        // System.out.println(list.toString());
 
-        list.remove("Yari");
+        // list.remove("Yari");
 
-        System.out.println(list);
+        // System.out.println(list);
 
-        System.out.println(list.get(list.size() - 1));
+        // System.out.println(list.get(list.size() - 1));
 
-        System.out.println(list.set(0, null));
+        // System.out.println(list.set(0, null));
 
-        System.out.println(list);
+        // System.out.println(list);
 
-        System.out.println(list.remove(null));
+        // System.out.println(list.remove(null));
 
-        System.out.println(list);
+        // System.out.println(list);
 
-        System.out.println(list.remove(2));
-        System.out.println(list.remove(1));
-        System.out.println(list.remove(0));
+        // System.out.println(list.remove(2));
+        // System.out.println(list.remove(1));
+        // System.out.println(list.remove(0));
 
-        System.out.println(list.isEmpty());
+        // System.out.println(list.isEmpty());
     }
 }
