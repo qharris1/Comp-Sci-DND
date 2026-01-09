@@ -8,9 +8,14 @@ public class BinaryTester {
         bst.add(45);
         bst.add(22);
 
-        System.out.println(bst.toString());
-        bst.remove(5);
-        System.out.println(bst.toString());
-        System.out.println(bst.getRoot());
+        // System.out.println(bst.toString());
+        // bst.remove(5);
+        // System.out.println(bst.toString());
+        // System.out.println(bst.getRoot());
+
+        // System.out.println(bst.contains(5));
+
+        System.out.println(bst.getHeight());
+        System.out.println(bst.getRoot().getLeft().getLeft().getLeft().getHeight());
     }
 }

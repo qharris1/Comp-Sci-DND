@@ -14,7 +14,24 @@ public class MyBST<E extends Comparable<E>> {
 	}
 
 	public int getHeight() {
-		return root.getHeight();
+		return getHighest(root);
+	}
+
+	private int getHighest(BinaryNode<E> node) {
+		if (node == null) {
+			return 0;
+		}
+		if (node.isLeaf()) {
+			return node.getHeight();
+		}
+		int left = 0, right = 0;
+		if (node.getLeft() != null) {
+			left = getHighest(node.getLeft());
+		}
+		if (node.getRight() != null) {
+			right = getHighest(node.getRight());
+		}
+		return left > right ? left : right;
 	}
 
 	// Returns true if this BST contains value; otherwise returns false.
@@ -133,6 +150,9 @@ public class MyBST<E extends Comparable<E>> {
 
 	// Returns the minimum in the tree
 	public E min() {
+		if (root == null) {
+			return null;
+		}
 		BinaryNode<E> currNode = root;
 		while (currNode.getLeft() != null) {
 			currNode = currNode.getLeft();
@@ -142,6 +162,9 @@ public class MyBST<E extends Comparable<E>> {
 
 	// Returns the maximum in the tree.
 	public E max() {
+		if (root == null) {
+			return null;
+		}
 		BinaryNode<E> currNode = root;
 		while (currNode.getRight() != null) {
 			currNode = currNode.getRight();
@@ -154,6 +177,10 @@ public class MyBST<E extends Comparable<E>> {
 	// e.g. [Apple, Cranberry, Durian, Mango]
 	public String toString() {
 		StringBuilder str = new StringBuilder("[");
+		if (root == null) {
+			str.append("]");
+			return str.toString();
+		}
 		BinaryNode<E> currNode = root;
 		if (currNode.getLeft() != null) {
 			while (currNode.getLeft() != null) {
