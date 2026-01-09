@@ -68,17 +68,85 @@ public class MyBST<E extends Comparable<E>> {
 	// If removing a node with two children: replace it with the
 	// largest node in the right subtree
 	public boolean remove(E value) {
+		BinaryNode<E> currNode = root;
+		while (currNode != null) {
+			if (currNode.getValue().equals(value)) {
+				BinaryNode<E> replacementNode = null;
+				if (currNode.hasRight()) {
+					replacementNode = currNode.getRight();
+					while (replacementNode.hasLeft()) {
+						replacementNode = replacementNode.getLeft();
+					}
+					detachFromParent(replacementNode);
+				} else if (currNode.hasLeft()) {
+					replacementNode = currNode.getLeft();
+					while (replacementNode.hasRight()) {
+						replacementNode = replacementNode.getRight();
+					}
+					detachFromParent(replacementNode);
+				} else {
+					if (currNode.equals(root)) {
+						root = null;
+					} else if (currNode.getParent().getLeft().equals(currNode)) {
+						currNode.getParent().setLeft(null);
+					} else {
+						currNode.getParent().setRight(null);
+					}
+					return true;
+				}
+				if (currNode.equals(root)) {
+					root = replacementNode;
+					replacementNode.setParent(null);
+				} else if (currNode.getParent().getLeft().equals(currNode)) {
+					currNode.getParent().setLeft(replacementNode);
+					replacementNode.setParent(currNode.getParent());
+				} else {
+					currNode.getParent().setRight(replacementNode);
+					replacementNode.setParent(currNode.getParent());
+				}
+				if (currNode.hasLeft() && replacementNode != currNode.getLeft()) {
+					replacementNode.setLeft(currNode.getLeft());
+					currNode.getLeft().setParent(replacementNode);
+				}
+				if (currNode.hasRight() && replacementNode != currNode.getRight()) {
+					replacementNode.setRight(currNode.getRight());
+					currNode.getRight().setParent(replacementNode);
+				}
+				return true;
+			}
+			currNode = value.compareTo(currNode.getValue()) < 0 ? currNode.getLeft()
+					: currNode.getRight();
+		}
 		return false;
+	}
+
+	private void detachFromParent(BinaryNode<E> node) {
+		if (node.getParent() == null) {
+			return;
+		}
+		if (node.getParent().getLeft() == node) {
+			node.getParent().setLeft(null);
+		} else {
+			node.getParent().setRight(null);
+		}
 	}
 
 	// Returns the minimum in the tree
 	public E min() {
-		return null;
+		BinaryNode<E> currNode = root;
+		while (currNode.getLeft() != null) {
+			currNode = currNode.getLeft();
+		}
+		return currNode.getValue();
 	}
 
 	// Returns the maximum in the tree.
 	public E max() {
-		return null;
+		BinaryNode<E> currNode = root;
+		while (currNode.getRight() != null) {
+			currNode = currNode.getRight();
+		}
+		return currNode.getValue();
 	}
 
 	// Returns a bracket-surrounded, comma separated list of the contents of the

@@ -9,6 +9,8 @@ public class BinaryTester {
         bst.add(22);
 
         System.out.println(bst.toString());
-        System.out.println(bst.getRoot().getRight());
+        bst.remove(5);
+        System.out.println(bst.toString());
+        System.out.println(bst.getRoot());
     }
 }
