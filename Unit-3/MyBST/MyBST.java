@@ -36,6 +36,9 @@ public class MyBST<E extends Comparable<E>> {
 
 	// Returns true if this BST contains value; otherwise returns false.
 	public boolean contains(E value) {
+		if (value == null) {
+			throw new IllegalArgumentException("BST cannot contain a null value");
+		}
 		BinaryNode<E> currNode = root;
 		while (currNode != null) {
 			if (currNode.getValue().equals(value)) {
@@ -52,6 +55,9 @@ public class MyBST<E extends Comparable<E>> {
 	// Adds value to this BST, unless this tree already holds value.
 	// Returns true if value has been added; otherwise returns false.
 	public boolean add(E value) {
+		if (value == null) {
+			throw new IllegalArgumentException("Cannot add null value to BST");
+		}
 		if (root == null) {
 			root = new BinaryNode<E>(value);
 			return true;
@@ -62,9 +68,7 @@ public class MyBST<E extends Comparable<E>> {
 		BinaryNode<E> currNode = root;
 		BinaryNode<E> lastNode = root;
 		while (currNode != null) {
-			if (currNode.getValue().equals(value)) {
-				return true;
-			} else if (value.compareTo(currNode.getValue()) < 0) {
+			if (value.compareTo(currNode.getValue()) < 0) {
 				lastNode = currNode;
 				currNode = currNode.getLeft();
 			} else {
@@ -85,7 +89,11 @@ public class MyBST<E extends Comparable<E>> {
 	// If removing a node with two children: replace it with the
 	// largest node in the right subtree
 	public boolean remove(E value) {
+		if (value == null) {
+			throw new IllegalArgumentException("Cannot remove null value to BST");
+		}
 		BinaryNode<E> currNode = root;
+		BinaryNode<E> childNode = null;
 		while (currNode != null) {
 			if (currNode.getValue().equals(value)) {
 				BinaryNode<E> replacementNode = null;
@@ -114,20 +122,28 @@ public class MyBST<E extends Comparable<E>> {
 				if (currNode.equals(root)) {
 					root = replacementNode;
 					replacementNode.setParent(null);
-				} else if (currNode.getParent().getLeft().equals(currNode)) {
+				} else if (currNode.getParent().getLeft() != null && currNode.getParent().getLeft().equals(currNode)) {
 					currNode.getParent().setLeft(replacementNode);
 					replacementNode.setParent(currNode.getParent());
-				} else {
+				} else if (currNode.getParent().getRight() != null) {
 					currNode.getParent().setRight(replacementNode);
 					replacementNode.setParent(currNode.getParent());
 				}
 				if (currNode.hasLeft() && replacementNode != currNode.getLeft()) {
+					if (replacementNode.hasLeft()) {
+						childNode = replacementNode.getLeft();
+					}
 					replacementNode.setLeft(currNode.getLeft());
 					currNode.getLeft().setParent(replacementNode);
+					addNodes(childNode);
 				}
 				if (currNode.hasRight() && replacementNode != currNode.getRight()) {
+					if (replacementNode.hasRight()) {
+						childNode = replacementNode.getRight();
+					}
 					replacementNode.setRight(currNode.getRight());
 					currNode.getRight().setParent(replacementNode);
+					addNodes(childNode);
 				}
 				return true;
 			}
@@ -146,6 +162,29 @@ public class MyBST<E extends Comparable<E>> {
 		} else {
 			node.getParent().setRight(null);
 		}
+	}
+
+	private void addNodes(BinaryNode<E> value) {
+		if (value == null) {
+			return;
+		}
+		BinaryNode<E> currNode = root;
+		BinaryNode<E> lastNode = root;
+		while (currNode != null) {
+			if (value.getValue().compareTo(currNode.getValue()) < 0) {
+				lastNode = currNode;
+				currNode = currNode.getLeft();
+			} else {
+				lastNode = currNode;
+				currNode = currNode.getRight();
+			}
+		}
+		if (value.getValue().compareTo(lastNode.getValue()) < 0) {
+			lastNode.setLeft(value);
+		} else {
+			lastNode.setRight(value);
+		}
+		value.setParent(lastNode);
 	}
 
 	// Returns the minimum in the tree
@@ -176,45 +215,19 @@ public class MyBST<E extends Comparable<E>> {
 	// nodes, in order
 	// e.g. [Apple, Cranberry, Durian, Mango]
 	public String toString() {
-		StringBuilder str = new StringBuilder("[");
 		if (root == null) {
-			str.append("]");
-			return str.toString();
+			return "[]";
 		}
-		BinaryNode<E> currNode = root;
-		if (currNode.getLeft() != null) {
-			while (currNode.getLeft() != null) {
-				currNode = currNode.getLeft();
-			}
-			while (!currNode.equals(root)) {
-				str.append(currNode.getValue().toString());
-				if (currNode.getRight() != null) {
-					str.append(", ");
-					str.append(currNode.getRight().getValue().toString());
-				}
-				str.append(", ");
-				currNode = currNode.getParent();
-			}
-		}
-		str.append(currNode.getValue().toString());
-		str.append(", ");
-		if (currNode.getRight() != null) {
-			currNode = currNode.getRight();
-			while (currNode.getLeft() != null) {
-				currNode = currNode.getLeft();
-			}
-			while (!currNode.equals(root)) {
-				str.append(currNode.getValue().toString());
-				if (currNode.getRight() != null) {
-					str.append(", ");
-					str.append(currNode.getRight().getValue().toString());
-				}
-				str.append(", ");
-				currNode = currNode.getParent();
-			}
-		}
-		str.delete(str.length() - 2, str.length());
-		str.append("]");
-		return str.toString();
+		StringBuilder str = new StringBuilder("[");
+		return appendTree(str, root).delete(str.length() - 2, str.length()).append("]").toString();
+	}
+
+	private StringBuilder appendTree(StringBuilder sb, BinaryNode<E> currentNode) {
+		if (currentNode == null)
+			return sb;
+		appendTree(sb, currentNode.getLeft());
+		sb.append(currentNode.getValue().toString()).append(", ");
+		appendTree(sb, currentNode.getRight());
+		return sb;
 	}
 }
