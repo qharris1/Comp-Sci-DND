@@ -15,19 +15,22 @@ public class MyStack<E> {
 		return head == null;
 	}
 
-	public boolean push(E obj) {
+	public E push(E obj) {
 		head = new ListNode<E>(obj, head);
-		return true;
+		return obj;
 	}
 
-	public boolean pop() {
-		if (head == null) throw new EmptyStackException();
+	public E pop() {
+		if (head == null)
+			throw new EmptyStackException();
+		ListNode<E> temp = head;
 		head = head.getNext();
-		return true;
+		return temp.getValue();
 	}
 
 	public E peek() {
-		if (head == null) throw new EmptyStackException();
+		if (head == null)
+			throw new EmptyStackException();
 		return head.getValue();
 	}
 }
