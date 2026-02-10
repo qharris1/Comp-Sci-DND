@@ -33,6 +33,8 @@ public class CookieMonsterTester {
 
 		for (String fileName : fileNames) {
 			CookieMonster monster = new CookieMonster(fileName);
+			
+			System.out.println("created");
 
 			long start = System.currentTimeMillis();
 			int optrecursion = monster.recursiveCookies();

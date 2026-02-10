@@ -51,7 +51,8 @@ public class CookieMonster {
 	}
 
 	/*
-	 * RECURSIVELY calculates the route which grants the most cookies. Returns the maximum number of
+	 * RECURSIVELY calculates the route which grants the most cookies. Returns the
+	 * maximum number of
 	 * cookies attainable.
 	 */
 	public int recursiveCookies() {
@@ -62,7 +63,7 @@ public class CookieMonster {
 	// Returns the maximum number of cookies edible starting from (and including)
 	// cookieGrid[row][col], or -1 if no path to bottom-right exists
 	public int recursiveCookies(int row, int col) {
-		if (!validPoint(row, col) || cookieGrid[row][col] == -1) {
+		if (!validPoint(row, col)) {
 			return -1;
 		}
 		if (row == cookieGrid.length - 1 && col == cookieGrid[0].length - 1) {
@@ -70,81 +71,72 @@ public class CookieMonster {
 		}
 		int goRight = recursiveCookies(row, col + 1), goDown = recursiveCookies(row + 1, col);
 		if (goRight == -1 && goDown == -1) {
-			return -1;
+			return cookieGrid[row][col];
 		}
 		return cookieGrid[row][col] + Math.max(goRight, goDown);
 	}
 
 	/*
-	 * Calculate which route grants the most cookies using a QUEUE. Returns the maximum number of
+	 * Calculate which route grants the most cookies using a QUEUE. Returns the
+	 * maximum number of
 	 * cookies attainable.
 	 */
 	/*
-	 * From any given position, always add the path right before adding the path down
+	 * From any given position, always add the path right before adding the path
+	 * down
 	 */
 	public int queueCookies() {
-		ArrayDeque<OrphanScout> queue = new ArrayDeque<OrphanScout>();
+		ArrayDeque<OrphanScout> queue = new ArrayDeque<>();
 		queue.add(new OrphanScout(0, 0, cookieGrid[0][0]));
 		int max = 0;
-		boolean cease = false;
-		while (!cease) {
-			cease = true;
-			int length = queue.size();
-			for (int i = 0; i < length; i++) {
-				OrphanScout curr = queue.peek();
-				int currentRow = curr.getEndingRow(), currentCol = curr.getEndingCol(),
-						numCookies = curr.getCookiesDiscovered();
-				if (validPoint(currentRow, currentCol + 1)) {
-					queue.add(new OrphanScout(currentRow, currentCol + 1,
-							numCookies + cookieGrid[currentRow][currentCol + 1]));
-				}
-
-				if (validPoint(currentRow + 1, currentCol)) {
-					queue.add(new OrphanScout(currentRow + 1, currentCol,
-							numCookies + cookieGrid[currentRow + 1][currentCol]));
-				}
-				queue.remove();
-			}
-			length = queue.size();
-			for (int i = 0; i < length; i++) {
-				OrphanScout curr = queue.remove();
-				if (curr.getEndingRow() != numRows - 1 || curr.getEndingCol() != numCols - 1) {
-					cease = false;
-				}
-				queue.add(curr);
-			}
-		}
 		while (!queue.isEmpty()) {
-			max = Math.max(max, queue.remove().getCookiesDiscovered());
+			OrphanScout curr = queue.remove();
+			int row = curr.getEndingRow(), col = curr.getEndingCol(), cookies = curr.getCookiesDiscovered();
+			boolean moved = false;
+			if (validPoint(row, col + 1)) {
+				moved = true;
+				queue.add(new OrphanScout(row, col + 1, cookies + cookieGrid[row][col + 1]));
+			}
+			if (validPoint(row + 1, col)) {
+				moved = true;
+				queue.add(new OrphanScout(row + 1, col, cookies + cookieGrid[row + 1][col]));
+			}
+			if (!moved || (row == numRows - 1 && col == numCols - 1)) {
+				max = Math.max(max, cookies);
+			}
 		}
-
-		return max;
+		return max == -1 ? 0 : max;
 	}
 
 	/*
-	 * Calculate which route grants the most cookies using a stack. Returns the maximum number of
+	 * Calculate which route grants the most cookies using a stack. Returns the
+	 * maximum number of
 	 * cookies attainable.
 	 */
 	/*
-	 * From any given position, always add the path right before adding the path down
+	 * From any given position, always add the path right before adding the path
+	 * down
 	 */
 	public int stackCookies() {
 		ArrayDeque<OrphanScout> stack = new ArrayDeque<>();
 		stack.push(new OrphanScout(0, 0, cookieGrid[0][0]));
 		int max = 0;
 		while (!stack.isEmpty()) {
+			boolean moved = false;
 			OrphanScout curr = stack.pop();
 			int currentRow = curr.getEndingRow(), currentCol = curr.getEndingCol(),
 					numCookies = curr.getCookiesDiscovered();
 			if (validPoint(currentRow + 1, currentCol)) {
+				moved = true;
 				stack.push(new OrphanScout(currentRow + 1, currentCol,
 						numCookies + cookieGrid[currentRow + 1][currentCol]));
 			}
 			if (validPoint(currentRow, currentCol + 1)) {
+				moved = true;
 				stack.push(new OrphanScout(currentRow, currentCol + 1,
 						numCookies + cookieGrid[currentRow][currentCol + 1]));
 			}
-			if (currentRow == numRows - 1 && currentCol == numCols - 1) {
+			if (!moved || currentRow == numRows - 1 && currentCol == numCols - 1) {
 				max = Math.max(max, numCookies);
 				continue;
 			}
