@@ -1,0 +1,66 @@
+public class HashTester {
+    public static void main(String[] args) {
+        Hash hash = new Hash();
+
+        String[] names = {
+                "Mateo Atluri",
+                "Asher Butan",
+                "Xander Cheuk",
+                "Taj Clement",
+                "Camille Condren",
+                "Evan Daneshrad",
+                "Felicia Duan",
+                "Jake Effress",
+                "Zachary Figlin",
+                "James Graczyk",
+                "David Hadi",
+                "Quinn Harris",
+                "Jackson Hubbard",
+                "Siona Kirschner",
+                "Dylan Martin",
+                "Morgan Maynard",
+                "Yari Milakin",
+                "Waller Morton",
+                "Andrew Stout",
+                "Mattin Tasbihgoo",
+                "Carter Tsao", "Rose Ananda",
+                "Autrin Anousheh",
+                "Joshua Bie",
+                "Elsa Cheng",
+                "Isabel Erlic",
+                "Jojo Gott",
+                "Connor Jun",
+                "Jordan Kay",
+                "James Klarin",
+                "Judy Law",
+                "Grayden Lichtman",
+                "Runshi Liu",
+                "Juan Lopez",
+                "Henry Margolis",
+                "Garret Morberg-Nguyen",
+                "Kai Nantamanasikarn",
+                "Remi O'Dell",
+                "Emil Palmer",
+                "Jaden Park",
+                "Ryder Rufi",
+                "Alice Shao",
+                "Marco Silvera",
+                "Samuel Tabib",
+                "Andrew Theiss",
+                "Shriya Vishwas",
+                "Nick Waller",
+                "Vikram Wright",
+                "Alex Yang",
+                "Ethan You",
+                "Lucas Yu",
+                "Jack Yuan",
+                "Jayden Zepeda",
+                "Lawrence Zhao",
+                "Michael Zhao",
+                "Olivia Zhu"};
+
+        for (String name : names) {
+            System.out.println(hash.hashFn(name));
+        }
+    }
+}
