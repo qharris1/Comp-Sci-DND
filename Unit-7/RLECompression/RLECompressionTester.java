@@ -7,6 +7,7 @@ public class RLECompressionTester {
             RLECompression.compress("HelloWorld.txt");
             // RLECompression.decode("HelloWorld.txt.bw.rle");
             RLECompression.decompress("HelloWorld.txt.bw.rle");
+            RLECompression.bwTransform("bw.txt");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
