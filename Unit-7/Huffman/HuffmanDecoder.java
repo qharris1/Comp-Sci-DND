@@ -14,7 +14,7 @@ public class HuffmanDecoder {
         try {
             BufferedReader br = new BufferedReader(new FileReader(codex));
             String line;
-            while ((line = br.readLine()) != null && line.lastIndexOf(' ') != -1) {
+            while ((line = br.readLine()) != null && !(line.isEmpty()) && line.lastIndexOf(' ') != -1) {
                 int lastSpace = line.lastIndexOf(' ');
 
                 paths.put(line.substring(lastSpace + 1), line.substring(0, lastSpace));

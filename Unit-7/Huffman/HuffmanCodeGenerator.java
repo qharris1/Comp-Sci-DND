@@ -106,6 +106,9 @@ public class HuffmanCodeGenerator {
         }
 
         if (node.getLeftChild() == null && node.getRightChild() == null) {
+            if (node.getValue().charAt(0) < 26) {
+                return;
+            }
             pw.append(node.getValue() + " " + path + '\n');
             values.put(node.getValue(), path);
             paths.put(path, node.getValue());
