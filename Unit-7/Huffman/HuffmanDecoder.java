@@ -14,7 +14,8 @@ public class HuffmanDecoder {
         try {
             BufferedReader br = new BufferedReader(new FileReader(codex));
             String line;
-            while ((line = br.readLine()) != null && !(line.isEmpty()) && line.lastIndexOf(' ') != -1) {
+            while ((line = br.readLine()) != null && !(line.isEmpty())
+                    && line.lastIndexOf(' ') != -1) {
                 int lastSpace = line.lastIndexOf(' ');
 
                 paths.put(line.substring(lastSpace + 1), line.substring(0, lastSpace));
@@ -39,14 +40,19 @@ public class HuffmanDecoder {
                 segment.append(c);
 
                 if (isCode(segment.toString())) {
-                    char decoded = decodeChar(segment.toString());
+                    String decoded = decodeStr(segment.toString());
 
-                    if (decoded == (char) 26) {
+                    if (decoded.charAt(0) == (char) 26) {
                         break;
                     }
 
-                    pw.write(decoded);
-                    segment.setLength(0);
+                    if (decoded.length() > 1) {
+                        pw.write((char) Integer.parseInt(decoded));
+                        segment.setLength(0);
+                    } else {
+                        pw.write(decoded);
+                        segment.setLength(0);
+                    }
                 }
             }
 
@@ -64,5 +70,12 @@ public class HuffmanDecoder {
 
     public char decodeChar(String binary) {
         return paths.get(binary).charAt(0);
+    }
+
+    public String decodeStr(String binary) {
+        if (paths.get(binary).equals("\\n")) {
+            return "\n";
+        }
+        return paths.get(binary);
     }
 }

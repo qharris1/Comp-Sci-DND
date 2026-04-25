@@ -66,6 +66,9 @@ public class HuffmanCodeGenerator {
         Object[] values = segments.values().toArray();
 
         for (int i = 0; i < keys.length; i++) {
+            if (keys[i].toString().charAt(0) < 26) {
+                keys[i] = "" + (int) (keys[i].toString().charAt(0));
+            }
             pq.add(new Value(keys[i].toString(), (Integer) (values[i])));
         }
 
@@ -106,9 +109,6 @@ public class HuffmanCodeGenerator {
         }
 
         if (node.getLeftChild() == null && node.getRightChild() == null) {
-            if (node.getValue().charAt(0) < 26) {
-                return;
-            }
             pw.append(node.getValue() + " " + path + '\n');
             values.put(node.getValue(), path);
             paths.put(path, node.getValue());

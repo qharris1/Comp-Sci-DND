@@ -23,8 +23,13 @@ public class HuffmanEncoder {
             int read;
             while ((read = br.read()) != -1) {
                 char c = (char) (read);
-                pw.write(encodeChar(c));
-                length += gen.getCode(c).length();
+                if (c < 26) {
+                    pw.write(encodeString("" + (int) (c)));
+                    length += encodeString("" + (int) (c)).length();
+                } else {
+                    pw.write(encodeChar(c));
+                    length += encodeChar(c).length();
+                }
             }
 
             String eof = encodeChar((char) 26);
@@ -46,6 +51,10 @@ public class HuffmanEncoder {
     }
 
     public String encodeChar(char input) {
+        return values.get("" + input) != null ? values.get("" + input) : "";
+    }
+
+    public String encodeString(String input) {
         return values.get("" + input) != null ? values.get("" + input) : "";
     }
 }
