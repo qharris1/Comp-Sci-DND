@@ -46,10 +46,16 @@ public class HuffmanDecoder {
                         break;
                     }
 
-                    if (decoded.length() > 1) {
-                        pw.write((char) Integer.parseInt(decoded));
-                        segment.setLength(0);
-                    } else {
+                    try {
+                        int val = Integer.parseInt(decoded);
+                        if (val > 9 && val < 26){
+                            pw.write((char) Integer.parseInt(decoded));
+                            segment.setLength(0);
+                        } else {
+                            pw.write(decoded);
+                            segment.setLength(0);
+                        }
+                    } catch (Exception e){
                         pw.write(decoded);
                         segment.setLength(0);
                     }
