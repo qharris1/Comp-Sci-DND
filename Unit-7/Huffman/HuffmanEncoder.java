@@ -1,19 +1,39 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 public class HuffmanEncoder {
-    public static void encodeFile(String fileToCompress) {
-        HuffmanCodeGenerator.makeCodeFile(fileToCompress);
+    private HashMap<String, String> values = new HashMap<String, String>();
+    private HuffmanCodeGenerator gen;
+
+    public HuffmanEncoder(String codeFile) {
+        gen = new HuffmanCodeGenerator(codeFile);
+        values = gen.getValues();
+    }
+
+    public void encodeFileToHuffmanCodes(String fileToCompress, String encodedFile) {
+        gen.makeCodeFile("codex.txt");
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileToCompress));
-            PrintWriter pw = new PrintWriter("encoded.txt");
+            PrintWriter pw = new PrintWriter(encodedFile);
 
+            int length = 0;
             int read;
             while ((read = br.read()) != -1) {
                 char c = (char) (read);
-                pw.write(HuffmanCodeGenerator.getCode(c));
+                pw.write(encodeChar(c));
+                length += gen.getCode(c).length();
+            }
+
+            String eof = encodeChar((char) 26);
+            pw.write(eof);
+            length += eof.length();
+
+            while (length % 8 != 0) {
+                pw.write("0");
+                length++;
             }
 
             br.close();
@@ -23,5 +43,9 @@ public class HuffmanEncoder {
             e.printStackTrace();
         }
 
+    }
+
+    public String encodeChar(char input) {
+        return values.get("" + input) != null ? values.get("" + input) : "";
     }
 }

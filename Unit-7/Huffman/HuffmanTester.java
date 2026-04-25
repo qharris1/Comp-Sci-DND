@@ -1,9 +1,12 @@
 public class HuffmanTester {
     public static void main(String[] args) {
+        HuffmanEncoder encoder = new HuffmanEncoder("helloWorld.txt");
 
-        HuffmanEncoder.encodeFile("helloWorld.txt");
+        encoder.encodeFileToHuffmanCodes("helloWorld.txt", "encoded.txt");
 
-        HuffmanDecoder.decodeFile("encoded.txt");
+        HuffmanDecoder decoder = new HuffmanDecoder("codex.txt");
+
+        decoder.decodeFileFromHuffmanCodes("encoded.txt", "decoded.txt");
 
         // System.out.println(comp.getRoot().getFrequency());
 

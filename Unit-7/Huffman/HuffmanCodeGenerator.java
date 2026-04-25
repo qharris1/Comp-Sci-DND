@@ -5,38 +5,50 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 
 public class HuffmanCodeGenerator {
-    private static HashMap<String, String> values = new HashMap<String, String>();
-    private static HashMap<String, String> paths = new HashMap<String, String>();
-    private static PriorityQueue<Value> pq = new PriorityQueue<Value>();
-    private static Value root;
+    private HashMap<String, String> values = new HashMap<String, String>();
+    private HashMap<String, String> paths = new HashMap<String, String>();
+    private PriorityQueue<Value> pq = new PriorityQueue<Value>();
+    private Value root;
 
-    public static String getCode(char c) {
-        return values.get("" + c);
-    }
-
-    public static String getValue(String path) {
-        return paths.get(path);
-    }
-
-    public static void makeCodeFile(String codeFile) {
-        try {
-            PrintWriter pw = new PrintWriter("codex.txt");
-            HashMap<String, Integer> segments = new HashMap<String, Integer>();
-            try (BufferedReader br = new BufferedReader(new FileReader(codeFile))) {
-                int character;
-                while ((character = br.read()) != -1) {
-                    char c = (char) character;
-                    if (segments.get("" + c) == null) {
-                        segments.put("" + c, 1);
-                    } else {
-                        segments.put("" + c, segments.get("" + c) + 1);
-                    }
+    public HuffmanCodeGenerator(String frequencyFile) {
+        HashMap<String, Integer> segments = new HashMap<String, Integer>();
+        try (BufferedReader br = new BufferedReader(new FileReader(frequencyFile))) {
+            int character;
+            while ((character = br.read()) != -1) {
+                char c = (char) character;
+                if (segments.get("" + c) == null) {
+                    segments.put("" + c, 1);
+                } else {
+                    segments.put("" + c, segments.get("" + c) + 1);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            sortByFrequency(segments);
+        sortByFrequency(segments);
+    }
+
+    public String getCode(char c) {
+        return values.get("" + c) != null ? values.get("" + c) : "";
+    }
+
+    public String getValue(String path) {
+        return paths.get(path) != null ? paths.get(path) : "";
+    }
+
+    public HashMap<String, String> getValues() {
+        return values;
+    }
+
+    public HashMap<String, String> getPaths() {
+        return paths;
+    }
+
+    public void makeCodeFile(String codeFile) {
+        try {
+            PrintWriter pw = new PrintWriter(codeFile);
+
             createTree(pw);
 
             pw.close();
@@ -45,7 +57,11 @@ public class HuffmanCodeGenerator {
         }
     }
 
-    private static void sortByFrequency(HashMap<String, Integer> segments) {
+    public void makeOnlyCodes() {
+        createTree();
+    }
+
+    private void sortByFrequency(HashMap<String, Integer> segments) {
         Object[] keys = segments.keySet().toArray();
         Object[] values = segments.values().toArray();
 
@@ -53,10 +69,10 @@ public class HuffmanCodeGenerator {
             pq.add(new Value(keys[i].toString(), (Integer) (values[i])));
         }
 
-        pq.add(new Value(null, 1));
+        pq.add(new Value("" + (char) (26), 1));
     }
 
-    private static void createTree(PrintWriter pw) {
+    private void createTree(PrintWriter pw) {
         while (!(pq.size() <= 1)) {
             Value left = pq.poll(), right = pq.poll(), parent =
                     new Value(left.getFrequency() + right.getFrequency(), null, left, right);
@@ -70,15 +86,26 @@ public class HuffmanCodeGenerator {
         buildCodes(root, "", pw);
     }
 
-    private static void buildCodes(Value node, String path, PrintWriter pw) {
+    private void createTree() {
+        while (!(pq.size() <= 1)) {
+            Value left = pq.poll(), right = pq.poll(), parent =
+                    new Value(left.getFrequency() + right.getFrequency(), null, left, right);
+            left.setParent(parent);
+            right.setParent(parent);
+            pq.add(parent);
+        }
+
+        root = pq.poll();
+
+        buildCodes(root, "");
+    }
+
+    private void buildCodes(Value node, String path, PrintWriter pw) {
         if (node == null) {
             return;
         }
 
         if (node.getLeftChild() == null && node.getRightChild() == null) {
-            if (node.getValue() == null) {
-                node.setValue("EOF");
-            }
             pw.append(node.getValue() + " " + path + '\n');
             values.put(node.getValue(), path);
             paths.put(path, node.getValue());
@@ -87,5 +114,21 @@ public class HuffmanCodeGenerator {
 
         buildCodes(node.getLeftChild(), path + "0", pw);
         buildCodes(node.getRightChild(), path + "1", pw);
+    }
+
+    private void buildCodes(Value node, String path) {
+        if (node == null) {
+            return;
+        }
+
+        if (node.getLeftChild() == null && node.getRightChild() == null) {
+            System.out.println(node.getValue() + " " + path);
+            values.put(node.getValue(), path);
+            paths.put(path, node.getValue());
+            return;
+        }
+
+        buildCodes(node.getLeftChild(), path + "0");
+        buildCodes(node.getRightChild(), path + "1");
     }
 }

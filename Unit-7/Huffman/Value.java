@@ -1,5 +1,4 @@
-@SuppressWarnings("rawtypes")
-public class Value implements Comparable {
+public class Value implements Comparable<Value> {
 
     private int frequency;
     private String value;
@@ -64,8 +63,13 @@ public class Value implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        Value other = (Value) (o);
-        return getFrequency() - other.getFrequency();
+    public int compareTo(Value o) {
+        if (frequency != o.getFrequency()) {
+            return Integer.compare(frequency, o.getFrequency());
+        }
+
+        String a = (value == null) ? "" : value;
+        String b = (o.getValue() == null) ? "" : o.getValue();
+        return a.compareTo(b);
     }
 }
