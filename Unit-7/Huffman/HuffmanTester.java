@@ -1,10 +1,11 @@
 public class HuffmanTester {
     public static void main(String[] args) {
-        HuffmanCodeGenerator comp = new HuffmanCodeGenerator();
 
-        comp.encode("helloWorld.txt");
+        HuffmanEncoder.encodeFile("helloWorld.txt");
 
-        System.out.println(comp.getRoot().getFrequency());
+        HuffmanDecoder.decodeFile("encoded.txt");
+
+        // System.out.println(comp.getRoot().getFrequency());
 
         // System.out.println("Getting A: " + comp.getSegments().get("a"));
         // System.out.println("Getting B: " + comp.getSegments().get("b"));
