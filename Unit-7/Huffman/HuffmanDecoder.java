@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class HuffmanDecoder {
     private HashMap<String, String> paths = new HashMap<>();
+    private HashMap<String, String> values = new HashMap<>();
 
     public HuffmanDecoder(String codex) {
         loadPaths(codex);
@@ -19,6 +20,7 @@ public class HuffmanDecoder {
                 int lastSpace = line.lastIndexOf(' ');
 
                 paths.put(line.substring(lastSpace + 1), line.substring(0, lastSpace));
+                values.put(line.substring(0, lastSpace), line.substring(lastSpace + 1));
             }
 
             br.close();
@@ -41,21 +43,16 @@ public class HuffmanDecoder {
 
                 if (isCode(segment.toString())) {
                     String decoded = decodeStr(segment.toString());
+                    System.out.println(decoded);
 
                     if (decoded.charAt(0) == (char) 26) {
                         break;
                     }
 
-                    try {
-                        int val = Integer.parseInt(decoded);
-                        if (val > 9 && val < 26){
-                            pw.write((char) Integer.parseInt(decoded));
-                            segment.setLength(0);
-                        } else {
-                            pw.write(decoded);
-                            segment.setLength(0);
-                        }
-                    } catch (Exception e){
+                    if (decoded.charAt(0) == '\\') {
+                        pw.write(Integer.parseInt(decoded.substring(1)));
+                        segment.setLength(0);
+                    } else {
                         pw.write(decoded);
                         segment.setLength(0);
                     }
@@ -70,18 +67,48 @@ public class HuffmanDecoder {
         }
     }
 
-    public boolean isCode(String binary) {
+    public void decodeFile(String encodedFile) {
+        if (!encodedFile.endsWith(".huf")) {
+            throw new IllegalArgumentException("Must end in .huf");
+        }
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(encodedFile));
+            PrintWriter pw = new PrintWriter(encodedFile.substring(0, encodedFile.length()-4));
+
+            int read;
+            while ((read = br.read()) != -1) {
+                String binary = charToBinary((char) read);
+                pw.write(binary);
+            }
+
+            br.close();
+            pw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        decodeFileFromHuffmanCodes(encodedFile.substring(0, encodedFile.length()-4), encodedFile.substring(0, encodedFile.length()-15) + ".txt");
+    }
+
+    private boolean isCode(String binary) {
         return paths.get(binary) != null;
     }
 
-    public char decodeChar(String binary) {
-        return paths.get(binary).charAt(0);
-    }
-
-    public String decodeStr(String binary) {
+    private String decodeStr(String binary) {
         if (paths.get(binary).equals("\\n")) {
             return "\n";
         }
         return paths.get(binary);
+    }
+
+    public String charToBinary(char c) {
+        String binary = Integer.toBinaryString(c);
+
+        while (binary.length() < 8) {
+            binary = "0" + binary;
+        }
+
+        return binary;
     }
 }

@@ -13,7 +13,7 @@ public class HuffmanEncoder {
     }
 
     public void encodeFileToHuffmanCodes(String fileToCompress, String encodedFile) {
-        gen.makeCodeFile("codex.txt");
+        gen.makeCodeFile(encodedFile.substring(0, encodedFile.length() - 4) + "Codex.txt");
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileToCompress));
@@ -50,11 +50,44 @@ public class HuffmanEncoder {
 
     }
 
-    public String encodeChar(char input) {
+    public void encodeFile(String fileToCompress) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileToCompress));
+            PrintWriter pw = new PrintWriter(fileToCompress + ".huf");
+
+            StringBuilder segment = new StringBuilder();
+            int read;
+            while ((read = br.read()) != -1) {
+                segment.append((char) read);
+                if (segment.length() == 8) {
+                    pw.write(binaryToChar(segment.toString()));
+                    segment.setLength(0);
+                }
+            }
+
+            br.close();
+            pw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private char binaryToChar(String binary) {
+        int value = 0;
+        for (int i = 0; i < binary.length(); i++) {
+            if (binary.charAt(i) == '1') {
+                value += (int) Math.pow(2, binary.length() - 1 - i);
+            }
+        }
+        return (char) value;
+    }
+
+    private String encodeChar(char input) {
         return values.get("" + input) != null ? values.get("" + input) : "";
     }
 
-    public String encodeString(String input) {
+    private String encodeString(String input) {
         return values.get("" + input) != null ? values.get("" + input) : "";
     }
 }

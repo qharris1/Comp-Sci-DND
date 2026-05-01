@@ -9,6 +9,7 @@ public class HuffmanCodeGenerator {
     private HashMap<String, String> paths = new HashMap<String, String>();
     private PriorityQueue<Value> pq = new PriorityQueue<Value>();
     private Value root;
+    private String[] codex = new String[256];
 
     public HuffmanCodeGenerator(String frequencyFile) {
         HashMap<String, Integer> segments = new HashMap<String, Integer>();
@@ -49,16 +50,21 @@ public class HuffmanCodeGenerator {
         try {
             PrintWriter pw = new PrintWriter(codeFile);
 
-            createTree(pw);
+            createTree();
+            buildCodes(root, "");
+
+            for (int i = 0; i < codex.length; i++) {
+                if (i < 26) {
+                    pw.append("\\" + i + " " + codex[i] + "\n");
+                } else {
+                    pw.append((char) (i) + " " + codex[i] + "\n");
+                }
+            }
 
             pw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void makeOnlyCodes() {
-        createTree();
     }
 
     private void sortByFrequency(HashMap<String, Integer> segments) {
@@ -75,48 +81,16 @@ public class HuffmanCodeGenerator {
         pq.add(new Value("" + (char) (26), 1));
     }
 
-    private void createTree(PrintWriter pw) {
-        while (!(pq.size() <= 1)) {
-            Value left = pq.poll(), right = pq.poll(), parent =
-                    new Value(left.getFrequency() + right.getFrequency(), null, left, right);
-            left.setParent(parent);
-            right.setParent(parent);
-            pq.add(parent);
-        }
-
-        root = pq.poll();
-
-        buildCodes(root, "", pw);
-    }
-
     private void createTree() {
         while (!(pq.size() <= 1)) {
-            Value left = pq.poll(), right = pq.poll(), parent =
-                    new Value(left.getFrequency() + right.getFrequency(), null, left, right);
+            Value left = pq.poll(), right = pq.poll(),
+                    parent = new Value(left.getFrequency() + right.getFrequency(), null, left, right);
             left.setParent(parent);
             right.setParent(parent);
             pq.add(parent);
         }
 
         root = pq.poll();
-
-        buildCodes(root, "");
-    }
-
-    private void buildCodes(Value node, String path, PrintWriter pw) {
-        if (node == null) {
-            return;
-        }
-
-        if (node.getLeftChild() == null && node.getRightChild() == null) {
-            pw.append(node.getValue() + " " + path + '\n');
-            values.put(node.getValue(), path);
-            paths.put(path, node.getValue());
-            return;
-        }
-
-        buildCodes(node.getLeftChild(), path + "0", pw);
-        buildCodes(node.getRightChild(), path + "1", pw);
     }
 
     private void buildCodes(Value node, String path) {
@@ -125,7 +99,18 @@ public class HuffmanCodeGenerator {
         }
 
         if (node.getLeftChild() == null && node.getRightChild() == null) {
-            System.out.println(node.getValue() + " " + path);
+            try {
+                if (node.getValue().length() > 1) {
+                    codex[Integer.parseInt(node.getValue())] = path;
+                } else {
+                    codex[(int) node.getValue().charAt(0)] = path;
+                }
+            } catch (Exception e) {
+                try {
+                    codex[(int) node.getValue().charAt(0)] = path;
+                } catch (Exception error) {
+                }
+            }
             values.put(node.getValue(), path);
             paths.put(path, node.getValue());
             return;
