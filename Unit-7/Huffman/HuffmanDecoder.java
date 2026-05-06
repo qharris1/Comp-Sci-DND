@@ -4,23 +4,26 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 public class HuffmanDecoder {
-    private HashMap<String, String> paths = new HashMap<>();
-    private HashMap<String, String> values = new HashMap<>();
+    public HashMap<String, String> paths = new HashMap<>();
+    public HashMap<String, String> values = new HashMap<>();
 
-    public HuffmanDecoder(String codex) {
-        loadPaths(codex);
+    public HuffmanDecoder(String codeFile) {
+        loadPaths(codeFile);
     }
 
-    private void loadPaths(String codex) {
+    public void loadPaths(String codex) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(codex));
             String line;
-            while ((line = br.readLine()) != null && !(line.isEmpty())
-                    && line.lastIndexOf(' ') != -1) {
-                int lastSpace = line.lastIndexOf(' ');
-
-                paths.put(line.substring(lastSpace + 1), line.substring(0, lastSpace));
-                values.put(line.substring(0, lastSpace), line.substring(lastSpace + 1));
+            int lineCount = 0;
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) {
+                    lineCount++;
+                    continue;
+                }
+                paths.put(line, "" + (char) (lineCount));
+                values.put("" + (char) (lineCount), line);
+                lineCount++;
             }
 
             br.close();
@@ -42,20 +45,13 @@ public class HuffmanDecoder {
                 segment.append(c);
 
                 if (isCode(segment.toString())) {
-                    String decoded = decodeStr(segment.toString());
-                    System.out.println(decoded);
+                    String decoded = "" + decodeChar(segment.toString());
 
                     if (decoded.charAt(0) == (char) 26) {
                         break;
                     }
-
-                    if (decoded.charAt(0) == '\\') {
-                        pw.write(Integer.parseInt(decoded.substring(1)));
-                        segment.setLength(0);
-                    } else {
-                        pw.write(decoded);
-                        segment.setLength(0);
-                    }
+                    pw.write(decoded);
+                    segment.setLength(0);
                 }
             }
 
@@ -71,14 +67,33 @@ public class HuffmanDecoder {
         if (!encodedFile.endsWith(".huf")) {
             throw new IllegalArgumentException("Must end in .huf");
         }
+
         try {
             BufferedReader br = new BufferedReader(new FileReader(encodedFile));
-            PrintWriter pw = new PrintWriter(encodedFile.substring(0, encodedFile.length()-4));
+            PrintWriter pw = new PrintWriter(encodedFile.substring(0, encodedFile.length() - 4));
 
+            StringBuilder segment = new StringBuilder();
             int read;
+
             while ((read = br.read()) != -1) {
                 String binary = charToBinary((char) read);
-                pw.write(binary);
+
+                for (int i = 0; i < binary.length(); i++) {
+                    segment.append(binary.charAt(i));
+
+                    if (isCode(segment.toString())) {
+                        String decoded = "" + decodeChar(segment.toString());
+
+                        if (decoded.charAt(0) == (char) 26) {
+                            br.close();
+                            pw.close();
+                            return;
+                        }
+
+                        pw.write(decoded);
+                        segment.setLength(0);
+                    }
+                }
             }
 
             br.close();
@@ -87,19 +102,14 @@ public class HuffmanDecoder {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        decodeFileFromHuffmanCodes(encodedFile.substring(0, encodedFile.length()-4), encodedFile.substring(0, encodedFile.length()-15) + ".txt");
     }
 
-    private boolean isCode(String binary) {
+    public boolean isCode(String binary) {
         return paths.get(binary) != null;
     }
 
-    private String decodeStr(String binary) {
-        if (paths.get(binary).equals("\\n")) {
-            return "\n";
-        }
-        return paths.get(binary);
+    public Character decodeChar(String binary) {
+        return paths.get(binary) == null ? 0 : paths.get(binary).charAt(0);
     }
 
     public String charToBinary(char c) {

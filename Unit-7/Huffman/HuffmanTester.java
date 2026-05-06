@@ -1,17 +1,25 @@
 public class HuffmanTester {
     public static void main(String[] args) {
-        HuffmanEncoder encoder = new HuffmanEncoder("helloWorld.txt");
 
-        encoder.encodeFileToHuffmanCodes("helloWorld.txt", "helloWorldEncoded.txt");
+        HuffmanCodeGenerator c = new HuffmanCodeGenerator("helloWorld.txt");
 
-        encoder.encodeFile("helloWorldEncoded.txt");
+        c.makeCodeFile("helloWorldCodex.txt");
 
-        HuffmanDecoder decoder = new HuffmanDecoder("helloWorldEncodedCodex.txt");
+        System.out.println(c.getFrequency('b'));
+
+        HuffmanEncoder encoder = new HuffmanEncoder("helloWorldCodex.txt");
+
+        // encoder.encodeFileToHuffmanCodes("helloWorld.txt",
+        //         "helloWorldEncoded.txt");
+
+        encoder.encodeFile("helloWorld.txt");
+
+        HuffmanDecoder decoder = new HuffmanDecoder("helloWorldCodex.txt");
 
         // decoder.decodeFileFromHuffmanCodes("helloWorldEncoded.txt",
         // "helloWorldDecoded.txt");
 
-        decoder.decodeFile("helloWorldEncoded.txt.huf");
+        decoder.decodeFile("helloWorld.txt.huf");
 
         // System.out.println(comp.getRoot().getFrequency());
 
