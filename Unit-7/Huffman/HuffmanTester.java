@@ -5,8 +5,6 @@ public class HuffmanTester {
 
         c.makeCodeFile("helloWorldCodex.txt");
 
-        System.out.println(c.getFrequency('b'));
-
         HuffmanEncoder encoder = new HuffmanEncoder("helloWorldCodex.txt");
 
         // encoder.encodeFileToHuffmanCodes("helloWorld.txt",
